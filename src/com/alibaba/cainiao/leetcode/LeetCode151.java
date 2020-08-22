@@ -46,7 +46,7 @@ public class LeetCode151 {
         String[] words = s.split("\\s+");
         StringBuilder sb = new StringBuilder();
         for (int i = words.length - 1; i >= 0; i--) {
-            sb.append(words[i] + "");
+            sb.append(words[i] + " ");
         }
 
         return sb.toString().trim();
