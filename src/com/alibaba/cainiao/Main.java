@@ -1,16 +1,16 @@
 package com.alibaba.cainiao;
 
-import com.alibaba.cainiao.leetcode.LeetCode151;
-import com.alibaba.cainiao.leetcode.LeetCode5;
+import com.alibaba.cainiao.leetcode.*;
 
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        LeetCode151 leetCode = new LeetCode151();
-        String reverseWords = leetCode.reverseWords("  hello world!  ");
-        System.out.println(reverseWords);
+        LeetCode929 leetCode = new LeetCode929();
+        String[] a = {"test.email+alex@leetcode.com","test.email.leet+alex@code.com"};
+        int i = leetCode.numUniqueEmails(a);
+        System.out.println(i);
     }
 
 }
