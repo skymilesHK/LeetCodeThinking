@@ -7,9 +7,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        LeetCode929 leetCode = new LeetCode929();
-        String[] a = {"test.email+alex@leetcode.com","test.email.leet+alex@code.com"};
-        int i = leetCode.numUniqueEmails(a);
+        LeetCode43 leetCode = new LeetCode43();
+        String i = leetCode.multiply("123", "456");
         System.out.println(i);
     }
 
