@@ -9,8 +9,9 @@ public class Main {
 
     public static void main(String[] args) {
         int[] a = {1,2,2,4};
-        LeetCode645 leetCode = new LeetCode645();
-        int[] nums = leetCode.findErrorNums(a);
+        LeetCode726 leetCode = new LeetCode726();
+        String s = leetCode.countOfAtoms("Mg(OH)2");
+        System.out.println(s);
     }
 
 }
