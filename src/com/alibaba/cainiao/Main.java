@@ -8,10 +8,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        int[] a = {1,2,2,4};
-        LeetCode726 leetCode = new LeetCode726();
-        String s = leetCode.countOfAtoms("Mg(OH)2");
-        System.out.println(s);
+        int[] a = {89,62,70,58,47,47,46,76,100,70};
+        LeetCode739 leetCode = new LeetCode739();
+        int[] ints = leetCode.dailyTemperatures(a);
     }
 
 }
