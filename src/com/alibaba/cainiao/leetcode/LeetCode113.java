@@ -55,15 +55,13 @@ public class LeetCode113 {
         if (root.left == null && root.right == null) {
             if (sum == root.val) {
                 res.add(new LinkedList<>(path));
-                return true;
             }
-            return false;
         }
 
         boolean b = dfs(root.left, sum - root.val, path) || dfs(root.right, sum - root.val, path);
-        if (!b) {
-            path.removeLast();
-        }
+
+        path.removeLast();
+
         return b;
     }
 
