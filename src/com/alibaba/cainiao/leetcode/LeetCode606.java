@@ -57,6 +57,7 @@ public class LeetCode606 {
             return root.val + "(" + tree2str(root.left) + ")";
         }
 
+        // two children
         return root.val + "(" + tree2str(root.left) + ")(" + tree2str(root.right) + ")";
     }
 
