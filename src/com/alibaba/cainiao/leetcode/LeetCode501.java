@@ -1,5 +1,8 @@
 package com.alibaba.cainiao.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 501. 二叉搜索树中的众数
  * 给定一个有相同值的二叉搜索树（BST），找出 BST 中的所有众数（出现频率最高的元素）。
@@ -25,12 +28,55 @@ package com.alibaba.cainiao.leetcode;
  */
 public class LeetCode501 {
 
+    int maxCount = 1;
+    int count = 1;
+    TreeNode pre = null;
+    List<Integer> list = new ArrayList<>();
+
     public int[] findMode(TreeNode root) {
         if (root == null) {
             return new int[] {};
         }
 
-        return new int[] {};
+        dfs(root);
+
+        return list.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    private void dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        dfs(root.left);
+
+        if (pre == null) {
+            // 第一个节点
+            count = 1;
+        } else if (pre.val == root.val) {
+            // 与前一个节点数值相同
+            count++;
+        } else {
+            // 与前一个节点数值不同
+            count = 1;
+        }
+
+        // 更新上一个节点
+        pre = root;
+
+        // 如果和最大值相同，放进list中
+        if (count == maxCount) {
+            list.add(root.val);
+        }
+
+        // 如果计数大于最大值
+        if (count > maxCount) {
+            maxCount = count;
+            list.clear(); // 很关键的一步，不要忘记清空result，之前result里的元素都失效了
+            list.add(root.val);
+        }
+
+        dfs(root.right);
     }
 
 }
