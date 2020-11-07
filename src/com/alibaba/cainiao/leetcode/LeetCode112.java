@@ -25,22 +25,22 @@ package com.alibaba.cainiao.leetcode;
 public class LeetCode112 {
 
     public boolean hasPathSum(TreeNode root, int sum) {
-        if (root == null) {
-            return false;
-        }
         return dfs(root, sum);
     }
 
-    private boolean dfs(TreeNode root, int sum) {
+    private boolean dfs(TreeNode root, int curSum) {
         if (root == null) {
-            return false;
-        }
-        // leaf
-        if (root.left == null && root.right == null) {
-            return root.val == sum;
+            return curSum == 0;
         }
 
-        return dfs(root.left, sum - root.val) || dfs(root.right, sum - root.val);
+        // leaf
+        if (root.left == null && root.right == null) {
+            return curSum == root.val;
+        }
+
+        boolean left = dfs(root.left, curSum - root.val);
+        boolean right = dfs(root.right, curSum - root.val);
+        return left || right;
     }
 
 }

@@ -30,17 +30,47 @@ package com.alibaba.cainiao.leetcode;
  */
 public class LeetCode114 {
 
+//    public void flatten(TreeNode root) {
+//        if (root == null) {
+//            return;
+//        }
+//
+//        // 后序, 为什么递归要加判断，因为不需要遍历root到leaf节点，而是leaf的上一个根节点
+//        if (root.left != null) {
+//            flatten(root.left);
+//        }
+//        if (root.right != null) {
+//            flatten(root.right);
+//        }
+//
+//        // 将原左子结点连上父节点的原右子节点上
+//        TreeNode tmp = root.right;
+//        root.right = root.left;
+//        root.left = null;
+//
+//        // 再把原右子节点连到新右子节点的右子节点上
+//        while (root.right != null) {
+//            root = root.right;
+//        }
+//        root.right = tmp;
+//    }
+
     public void flatten(TreeNode root) {
+        dfs(root);
+    }
+
+    private void dfs(TreeNode root) {
         if (root == null) {
             return;
         }
 
         // 后序, 为什么递归要加判断，因为不需要遍历root到leaf节点，而是leaf的上一个根节点
         if (root.left != null) {
-            flatten(root.left);
+            dfs(root.left);
         }
+
         if (root.right != null) {
-            flatten(root.right);
+            dfs(root.right);
         }
 
         // 将原左子结点连上父节点的原右子节点上
@@ -54,5 +84,4 @@ public class LeetCode114 {
         }
         root.right = tmp;
     }
-
 }

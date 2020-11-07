@@ -33,37 +33,29 @@ import java.util.List;
  */
 public class LeetCode113 {
 
-    List<List<Integer>> res = new ArrayList<>();
+    List<List<Integer>> res = new LinkedList<>();
 
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        if (root == null) {
-            return res;
-        }
-
-        boolean b = dfs(root, sum, new LinkedList<Integer>());
+        dfs(root, sum, new LinkedList<>());
         return res;
     }
 
-    private boolean dfs(TreeNode root, int sum, LinkedList<Integer> path) {
+    private void dfs(TreeNode root, int curSum, LinkedList<Integer> path) {
         if (root == null) {
-            return false;
+            return;
         }
 
         path.add(root.val);
 
         // leaf
         if (root.left == null && root.right == null) {
-            if (sum == root.val) {
+            if (root.val == curSum) {
                 res.add(new LinkedList<>(path));
             }
         }
 
-        boolean b = dfs(root.left, sum - root.val, path) || dfs(root.right, sum - root.val, path);
-
+        dfs(root.left, curSum - root.val, path);
+        dfs(root.right, curSum - root.val, path);
         path.removeLast();
-
-        return b;
     }
-
-
 }
