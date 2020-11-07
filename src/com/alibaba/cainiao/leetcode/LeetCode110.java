@@ -37,7 +37,7 @@ package com.alibaba.cainiao.leetcode;
 public class LeetCode110 {
 
     public boolean isBalanced(TreeNode root) {
-        if(root == null){
+        if (root == null) {
             return true;
         }
         int leftHeight = getHeight(root.left);
