@@ -10,9 +10,8 @@ public class Main {
     public static void main(String[] args) {
         int[] a = {1,3,-1,-3,5,3,6,7};
 
-        Solution solution = new Solution();
-        solution.maxSlidingWindow(a, 3);
-
+        LeetCode767 leetCode = new LeetCode767();
+        leetCode.reorganizeString("vvvlo");
     }
 
     private static void quickSort(int[] nums) {
