@@ -8,10 +8,11 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        int[] a = {1,3,-1,-3,5,3,6,7};
+        int[] q = {10,20,5};
+        int[] w = {70,50,30};
 
-        LeetCode767 leetCode = new LeetCode767();
-        leetCode.reorganizeString("vvvlo");
+        LeetCode7 leetCode = new LeetCode7();
+        leetCode.reverse(123);
     }
 
     private static void quickSort(int[] nums) {
