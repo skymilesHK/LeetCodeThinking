@@ -12,40 +12,32 @@ public class Main {
         int[] w = {70,50,30};
 
         LeetCode7 leetCode = new LeetCode7();
-        leetCode.reverse(123);
+        int sqrt = mySqrt(8);
+        System.out.println(sqrt);
     }
 
-    private static void quickSort(int[] nums) {
-        quickSort(nums, 0, nums.length - 1);
-    }
-
-    private static void quickSort(int[] nums, int l, int r) {
-        if (l >= r) {
-            return;
+    public static int mySqrt(int x) {
+        if (x == 0 || x == 1) {
+            return x;
         }
 
-        int pivot = nums[l], i = l - 1, j = r + 1;
-        while (i < j) {
-            do {
-                i++;
-            } while (nums[i] < pivot);
-
-            do {
-                j--;
-            } while (nums[j] > pivot);
-
-            if (i < j) {
-                swap(nums, i, j);
+        int start = 0, end = x, mid = x;
+        while (start + 1 < end) {
+            mid = start + (end - start) / 2;
+            if (mid > x / mid) {
+                end = mid;
+            } else if (mid < x / mid) {
+                start = mid;
+            } else {
+                return mid;
             }
         }
 
-        quickSort(nums, l, j);
-        quickSort(nums, j + 1, r);
-    }
-
-    private static void swap(int[] nums, int i, int j) {
-        int t = nums[i];
-        nums[i] = nums[j];
-        nums[j] = t;
+        // t^2 <= x
+        if (end <= x / end) {
+            return end;
+        } else {
+            return start;
+        }
     }
 }

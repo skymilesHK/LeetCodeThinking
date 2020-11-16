@@ -13,8 +13,7 @@ import java.util.List;
 public class LeetCode94 {
 
     List<Integer> res = new ArrayList<>();
-
-    // 递归
+//    // 递归
 //    public List<Integer> inorderTraversal(TreeNode root) {
 //        if (root == null) {
 //            return res;
