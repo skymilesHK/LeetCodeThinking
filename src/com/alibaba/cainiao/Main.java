@@ -2,42 +2,53 @@ package com.alibaba.cainiao;
 
 import com.alibaba.cainiao.leetcode.*;
 
+import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        int[] q = {10,20,5};
-        int[] w = {70,50,30};
+        int[] A = {5,2,3,4};
 
-        LeetCode7 leetCode = new LeetCode7();
-        int sqrt = mySqrt(8);
-        System.out.println(sqrt);
+        mergeSort(A, 0, A.length - 1);
+        System.out.println(A);
     }
 
-    public static int mySqrt(int x) {
-        if (x == 0 || x == 1) {
-            return x;
+    private static void mergeSort(int[] A, int low, int high) {
+        if (low >= high) {
+            return;
         }
 
-        int start = 0, end = x, mid = x;
-        while (start + 1 < end) {
-            mid = start + (end - start) / 2;
-            if (mid > x / mid) {
-                end = mid;
-            } else if (mid < x / mid) {
-                start = mid;
+        int mid = low + (high - low) / 2;
+        mergeSort(A, low, mid);
+        mergeSort(A, mid + 1, high);
+        merge(A, low, mid, high);
+    }
+
+    private static void merge(int[] A, int low, int mid, int high) {
+        int[] t = new int[high - low + 1];
+        int p = low, q = mid + 1, index = 0;
+        while (p <= mid && q <= high) {
+            // 逆序
+            if (A[p] > A[q]) {
+                t[index++] = A[q++];
             } else {
-                return mid;
+                t[index++] = A[p++];
             }
         }
 
-        // t^2 <= x
-        if (end <= x / end) {
-            return end;
-        } else {
-            return start;
+        // 没使用完
+        while (p <= mid) {
+            t[index++] = A[p++];
         }
+
+        while (q <= high) {
+            t[index++] = A[q++];
+        }
+        // t已经有序，copy到源A数组
+        System.arraycopy(t, 0, A, low, high - low + 1);
     }
+
 }
