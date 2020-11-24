@@ -5,50 +5,38 @@ import com.alibaba.cainiao.leetcode.*;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
 
+    static Scanner in = new Scanner(System.in);
+    static final int N = 100001;
+
     public static void main(String[] args) {
-        int[] A = {5,2,3,4};
-
-        mergeSort(A, 0, A.length - 1);
-        System.out.println(A);
-    }
-
-    private static void mergeSort(int[] A, int low, int high) {
-        if (low >= high) {
-            return;
+        // 1 2 2 3 5
+        int n = in.nextInt();
+        int m = in.nextInt();
+        int[] A = new int[n];
+        int[] B = new int[m];
+        for (int i = 0; i < n; i++) {
+            A[i] = in.nextInt();
+        }
+        for (int i = 0; i < m; i++) {
+            B[i] = in.nextInt();
         }
 
-        int mid = low + (high - low) / 2;
-        mergeSort(A, low, mid);
-        mergeSort(A, mid + 1, high);
-        merge(A, low, mid, high);
-    }
-
-    private static void merge(int[] A, int low, int mid, int high) {
-        int[] t = new int[high - low + 1];
-        int p = low, q = mid + 1, index = 0;
-        while (p <= mid && q <= high) {
-            // 逆序
-            if (A[p] > A[q]) {
-                t[index++] = A[q++];
-            } else {
-                t[index++] = A[p++];
+        int j = 0;
+        for (int i = 0; i < B.length && j < A.length; i++) {
+            if (A[j] == B[i]) {
+                j++;
             }
         }
 
-        // 没使用完
-        while (p <= mid) {
-            t[index++] = A[p++];
+        if (j == A.length) {
+            System.out.println("Yes");
+        } else {
+            System.out.println("No");
         }
-
-        while (q <= high) {
-            t[index++] = A[q++];
-        }
-        // t已经有序，copy到源A数组
-        System.arraycopy(t, 0, A, low, high - low + 1);
     }
-
 }
