@@ -4,27 +4,21 @@ import java.util.*;
 
 public class Solution {
 
-    public TreeNode sortedArrayToBST(int[] nums) {
-        int n = nums.length;
-        if (n == 0) {
-            return null;
-        }
-
-        return dfs(nums, 0, n - 1);
+    public boolean hasPathSum(TreeNode root, int sum) {
+        return dfs(root, sum);
     }
 
-    // nums[l~r]之前取值，建立nums[mid]为根节点的二叉树，返回这个根节点
-    private TreeNode dfs(int[] nums, int left, int right) {
-        if (left > right) {
-            return null;
-        } else if (left == right) {
-            return new TreeNode(nums[left]);
-        } else {
-            int mid = left + (right - left) / 2;
-            TreeNode root = new TreeNode(nums[mid]);
-            root.left = dfs(nums, left, mid - 1);
-            root.right = dfs(nums, mid + 1, right);
-            return root;
+    private boolean dfs(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
         }
+
+        // leaf
+        if (root.left == null && root.right == null) {
+            return root.val == sum;
+        }
+
+        return dfs(root.left, sum - root.val) || dfs(root.right, sum - root.val);
+
     }
 }
