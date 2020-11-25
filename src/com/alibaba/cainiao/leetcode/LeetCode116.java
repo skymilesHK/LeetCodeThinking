@@ -1,9 +1,6 @@
 package com.alibaba.cainiao.leetcode;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * 116. 填充每个节点的下一个右侧节点指针
@@ -41,7 +38,7 @@ public class LeetCode116 {
 
     public Node connect(Node root) {
         if (root == null) {
-            return root;
+            return null;
         }
 
         Queue<Node> q = new ArrayDeque<>();
@@ -50,10 +47,10 @@ public class LeetCode116 {
             int levelSize = q.size();
             for (int i = 0; i < levelSize; i++) {
                 Node t = q.poll();
-                if (i >= levelSize - 1) {
-                    t.next = null;
-                } else {
+                if (i != levelSize - 1) {
                     t.next = q.peek();
+                } else {
+                    t.next = null;
                 }
                 if (t.left != null) {
                     q.offer(t.left);
@@ -62,7 +59,6 @@ public class LeetCode116 {
                     q.offer(t.right);
                 }
             }
-
         }
         return root;
     }

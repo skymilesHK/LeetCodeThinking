@@ -73,8 +73,8 @@ public class LeetCode124 {
         return res;
     }
 
-    // 1. 经过root节点(root是最高点的path)
-    // 2.最多使用左右一边的子节点,不然不是path
+    // 1.经过root节点(root为最高点的path)
+    // 2.最多使用左右一边的子节点,不然不是path, 也可以一个边也不选
     private int dfs(TreeNode root) {
         if (root == null) {
             return 0;
