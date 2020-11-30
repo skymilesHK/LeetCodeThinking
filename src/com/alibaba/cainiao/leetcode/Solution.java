@@ -4,35 +4,25 @@ import java.util.*;
 
 public class Solution {
 
-    List<String> res = new ArrayList<>();
+    public static void main(String[] args) {
+        Employee e1 = new Employee();
+        e1.setId(1);
+        e1.setImportance(5);
+        e1.setSubordinates(Arrays.asList(2, 3));
 
-    public List<String> binaryTreePaths(TreeNode root) {
-        if (root == null) {
-            return res;
-        }
+        Employee e2 = new Employee();
+        e2.setId(2);
+        e2.setImportance(3);
+        e2.setSubordinates(Collections.emptyList());
 
-        dfs(root, "");
-        return res;
-    }
+        Employee e3 = new Employee();
+        e3.setId(3);
+        e3.setImportance(3);
+        e3.setSubordinates(Collections.emptyList());
 
-    private void dfs(TreeNode root, String path) {
-        if (root == null) {
-            return;
-        }
-
-        path += root.val;
-
-        // leaf
-        if (root.left == null && root.right == null) {
-            res.add(path);
-        }
-
-        if (root.left != null) {
-            dfs(root.left, path + "->");
-        }
-
-        if (root.right != null) {
-            dfs(root.right, path + "->");
-        }
+        List<Employee> employees = Arrays.asList(e1, e2, e3);
+        LeetCode690 leetCode = new LeetCode690();
+        int importance = leetCode.getImportance(employees, 1);
+        System.out.println(importance);
     }
 }
