@@ -17,7 +17,7 @@ import java.util.List;
  * 原因：342 + 465 = 807
  */
 public class LeetCode2 {
-
+    // https://blog.csdn.net/cysunc/article/details/86749910
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         if (l1 == null) {
             return l2;
@@ -26,18 +26,20 @@ public class LeetCode2 {
             return l1;
         }
 
-        //进位
-        int carry = 0;
+        // 总和
         int sum = 0;
-        // 新的结果链表的头节点
+        // 进位
+        int t = 0;
+        // dummy
         ListNode dummy = new ListNode(-1);
         ListNode p1 = l1;
         ListNode p2 = l2;
         ListNode p3 = dummy;
+
         while (p1 != null || p2 != null) {
-            sum = carry;
+            sum = t;
             if (p1 != null) {
-                sum += p1.val;;
+                sum += p1.val;
                 p1 = p1.next;
             }
 
@@ -45,16 +47,17 @@ public class LeetCode2 {
                 sum += p2.val;
                 p2 = p2.next;
             }
+
             p3.next = new ListNode(sum % 10);
-            carry = sum / 10;
+            t = sum / 10;
             p3 = p3.next;
         }
 
-        if (carry > 0) {
+        if (t > 0) {
             p3.next = new ListNode(1);
         }
 
-        return p3.next;
+        return dummy.next;
     }
 
 }
