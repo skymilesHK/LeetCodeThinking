@@ -10,28 +10,28 @@ public class Solution {
     }
 
     // https://www.acwing.com/video/1347/
-    public ListNode reverseKGroup(ListNode head, int k) {
 
+    public ListNode reverseKGroup(ListNode head, int k) {
         if (head == null || k == 0) {
             return null;
         }
 
         var dummy = new ListNode(-1);
         dummy.next = head;
-        var p = dummy;
+        var pre = dummy;
         var c = dummy;
-        while (p != null) {
-            c = p;
+        while (pre != null) {
+            c = pre;
             for (int i = 0; i < k && c != null; i++) {
                 c = c.next;
             }
-
             if (c == null) {
                 break;
             }
 
-            var a = p.next;
-            var b = a.next;
+            var a = pre.next;
+            var b = pre.next.next;
+            // 反转k - 1次
             for (int i = 0; i < k - 1; i++) {
                 c = b.next;
                 b.next = a;
@@ -39,12 +39,7 @@ public class Solution {
                 b = c;
             }
 
-            c = p.next;
-            p.next = a;
-            c.next = b;
-            p = c;
+            pre
         }
-
-        return dummy.next;
     }
 }
