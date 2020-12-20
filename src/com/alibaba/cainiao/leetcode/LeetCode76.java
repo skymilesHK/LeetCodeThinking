@@ -37,12 +37,12 @@ public class LeetCode76 {
 
         for ( int l = 0, r = 0; r < s.length(); r++) {
             hs[s.charAt(r)]++;
-            // matchCnt 表示t串有多少个字符被match，注意是<=, 因为刚刚hs[s.charAt(r)]++; =也表示之前是少一个的字符匹配的
+            // matchCnt 表示t串有多少个字符被s串match，新来的s.charAt(r)，只要个数没有超过t串出现的次数，那么匹配个数就要+1
             if (ht[s.charAt(r)] >= hs[s.charAt(r)]) {
                 matchCnt++;
             }
 
-            // 开始缩小窗口
+            // 尝试缩小窗口,ht[s.charAt(l)]表示第一个需要匹配的那个字符的个数
             while (l < s.length() && ht[s.charAt(l)] < hs[s.charAt(l)]) {
                 hs[s.charAt(l++)]--;
             }

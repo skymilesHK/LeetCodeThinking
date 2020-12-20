@@ -17,13 +17,12 @@ package com.alibaba.cainiao.leetcode;
 public class LeetCode686 {
 
     // https://www.youtube.com/watch?v=tm0p3KE0KE8&pbjreload=101
-
     public int repeatedStringMatch(String A, String B) {
         StringBuilder sb = new StringBuilder(A);
         int cnt = 1;
         while (sb.length() < B.length()) {
-            sb.append(A);
             cnt++;
+            sb.append(A);
         }
 
         if (sb.indexOf(B) >= 0) {
@@ -31,10 +30,11 @@ public class LeetCode686 {
         }
 
         sb.append(A);
-        cnt++;
         if (sb.indexOf(B) >= 0) {
+            cnt++;
             return cnt;
         }
+
         return -1;
     }
 

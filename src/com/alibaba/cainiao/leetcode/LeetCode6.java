@@ -33,25 +33,24 @@ public class LeetCode6 {
 
     // https://www.bilibili.com/video/av67735634?from=search&seid=5567045649365268921
     public String convert(String s, int nRows) {
-        if (nRows == 1) {
+        if (nRows <= 1) {
             return s;
         }
 
-        int n = s.length();
         StringBuilder[] sbs = new StringBuilder[nRows];
         for (int i = 0; i < nRows; i++) {
             sbs[i] = new StringBuilder();
         }
 
         int idx = 0;
-        while (idx < n) {
+        while (idx < s.length()) {
             // 竖直方向
-            for (int i = 0; i < nRows && idx < n; i++) {
+            for (int i = 0; i < nRows && idx < s.length(); i++) {
                 sbs[i].append(s.charAt(idx++));
             }
 
             // 斜方向
-            for (int i = nRows - 1 - 1; i >= 1 && idx < n; i--) {
+            for (int i = nRows - 1 - 1; i >= 1; i--) {
                 sbs[i].append(s.charAt(idx++));
             }
         }

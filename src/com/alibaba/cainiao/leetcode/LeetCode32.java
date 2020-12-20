@@ -23,24 +23,27 @@ import java.util.Deque;
  */
 public class LeetCode32 {
 
-    // https://www.youtube.com/watch?v=vre71lAMjqI
-    // 23:03开始
+    // https://www.acwing.com/video/1355/
+    // https://www.acwing.com/solution/content/114/
     public int longestValidParentheses(String s) {
         Deque<Integer> stack = new ArrayDeque<>();
         int res = 0;
-        for (int i = 0; i < s.length(); i++) {
+        //用 start 记录一个新的可能合法的子串的起始位置。初始设为 0。
+        for (int i = 0, start = 0; i < s.length(); i++) {
             if (s.charAt(i) == '(') {
                 stack.push(i);
             } else {
                 // 右括号可以计算长度了
-                if (!stack.isEmpty() && s.charAt(stack.peek()) == '(') {
-                    // 抵消
-                    stack.poll();
-                    int len = stack.isEmpty() ? i - (-1) : i - stack.peek();
-                    res = Math.max(res, len);
+                if (!stack.isEmpty()) {
+                   stack.pop();
+                   if (!stack.isEmpty()) {
+                       res = Math.max(res, i - stack.peek());
+                   } else {
+                       res = Math.max(res, i - start + 1);
+                   }
                 } else {
-                    // 栈为空，右括号，说明是无法匹配的右括号,记录索引
-                    stack.push(i);
+                    // 栈为空，右括号，说明是无法匹配的右括号,记录下一个合法子串的起始位置
+                    start = i + 1;
                 }
             }
         }
