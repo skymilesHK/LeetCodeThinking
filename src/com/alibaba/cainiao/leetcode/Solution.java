@@ -12,8 +12,68 @@ public class Solution {
         leetCode.shiftingLetters("abc", a);
     }
 
+    /**
+     * 1. 判断井字棋是否合法, 那么把每个条件都细化为逻辑来判断
+     * 2. 可以根据 X赢 或 O赢分为4中情况讨论
+     *     2.1 X赢了, O没赢: x先手, 所以此时合法情况是 x 比 o 多一个
+     *     2.2 X没赢, O赢了: x先手, 所以此时合法情况是 x 与 o 相等
+     *     2.3 X没赢, O没赢: 中间情况 0 <= count(x) - count(o) <= 1
+     *     2.4 X赢了, O赢了: 必定非法
+     *
+     * 3. 怎么判断有没有人赢: 当有 3 个相同（且非空）的字符填充任何行、列或对角线时，游戏结束。
+     *
+     * https://www.acwing.com/solution/content/10721/
+     * https://www.bilibili.com/video/BV1wZ4y1u7ew?from=search&seid=7834459577974549367
+     */
+    public boolean validTicTacToe(String[] board) {
+        int xCnt = 0, oCnt = 0;
+        for (String row : board) {
+            char[] rowChars = row.toCharArray();
+            for (char ch : rowChars) {
+                if (ch == 'X') {
+                    xCnt++;
+                } else if (ch == 'O') {
+                    oCnt++;
+                }
+            }
+        }
 
+        int diff = xCnt - oCnt;
+        boolean xIsWinner = isWinner('X', board);
+        boolean oIsWinner = isWinner('O', board);
 
+        if (xIsWinner && !oIsWinner) {
+            return diff == 1;
+        }
+        if (oIsWinner && !xIsWinner) {
+            return diff == 0;
+        }
+        if (!xIsWinner && !oIsWinner) {
+            return 0 <= diff && diff <= 1;
+        }
+        return false;
+    }
+
+    private boolean isWinner(char p, String[] board) {
+        for (int i = 0; i < board.length; i++) {
+            if (p == board[0].charAt(i) && p == board[1].charAt(i) && p == board[2].charAt(i)) {
+                return true;
+            }
+            if (p == board[i].charAt(0) && p == board[i].charAt(1) && p == board[i].charAt(2)) {
+                return true;
+            }
+        }
+
+        if (p == board[0].charAt(0) && p == board[1].charAt(1) && p == board[2].charAt(2)) {
+            return true;
+        }
+
+        if (p == board[0].charAt(2) && p == board[1].charAt(1) && p == board[2].charAt(0)) {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 class Trie {

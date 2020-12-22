@@ -46,16 +46,16 @@ public class LeetCode687 {
         if (node == null) {
             return 0;
         }
-        int left = dfs(node.left);
-        int right = dfs(node.right);
+        int leftPathLen = dfs(node.left);
+        int rightPathLen = dfs(node.right);
 
         int arrowLeft = 0, arrowRight = 0;
         if (node.left != null && node.left.val == node.val) {
-            arrowLeft += left + 1;
+            arrowLeft += leftPathLen + 1;
         }
 
         if (node.right != null && node.right.val == node.val) {
-            arrowRight += right + 1;
+            arrowRight += rightPathLen + 1;
         }
 
         res = Math.max(res, arrowLeft + arrowRight);
