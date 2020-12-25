@@ -44,11 +44,10 @@ import java.util.List;
 public class LeetCode93 {
 
     // https://www.acwing.com/video/1438/
-
     List<String> res = new ArrayList<>();
     public List<String> restoreIpAddresses(String s) {
         int n = s.length();
-        if(n > 12) {
+        if(n > 12 || n < 4) {
             return res;
         }
         dfs(s, 0, 0, "");
@@ -57,8 +56,8 @@ public class LeetCode93 {
 
     // k从零开始表示取到第k组数字了，k=4时说明已经取了四组数字了
     // idx是s的下标
-    private void dfs(String s, int idx, int k, String path) {
-        if (idx == s.length()) {
+    private void dfs(String s, int start, int k, String path) {
+        if (start == s.length()) {
             if (k == 4) {
                 // 去掉最后的.
                 path = path.substring(0, path.length() - 1);
@@ -73,9 +72,9 @@ public class LeetCode93 {
 
         int t = 0;
         // 从idx开始搜
-        for (int i = idx; i < s.length(); i++) {
+        for (int i = start; i < s.length(); i++) {
             // leading 0
-            if (i != idx && s.charAt(idx) == '0') {
+            if (i != start && s.charAt(start) == '0') {
                 break;
             }
 
