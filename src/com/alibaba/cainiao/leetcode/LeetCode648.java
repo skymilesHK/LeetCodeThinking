@@ -60,7 +60,7 @@ import java.util.Set;
 public class LeetCode648 {
 
     // https://www.bilibili.com/video/BV1VW411Y7h4?from=search&seid=12862247511729070019
-
+    // 方法1 Set
     public String replaceWords(List<String> dictionary, String sentence) {
         Set<String> set = new HashSet<>();
         for (int i = 0; i < dictionary.size(); i++) {
@@ -81,5 +81,79 @@ public class LeetCode648 {
 
         sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
+    }
+
+    // 方法2 Trie
+    public String replaceWords2(List<String> dictionary, String sentence) {
+        Trie trie = new Trie();
+        for (String word : dictionary) {
+            trie.insert(word);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        String[] split = sentence.split("\\s+");
+        for (int i = 0; i < split.length; i++) {
+            String successor = split[i];
+            sb.append(trie.bizSearchPrefix(successor)).append(" ");
+        }
+
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+
+    class Trie {
+        public class TrieNode {
+            public boolean isWord;
+            public TrieNode[] next;
+
+            public TrieNode() {
+                isWord = false;
+                next = new TrieNode[26];
+            }
+        }
+
+        TrieNode root = null;
+
+        /**
+         * Initialize your data structure here.
+         */
+        public Trie() {
+            root = new TrieNode();
+        }
+
+        /**
+         * Inserts a word into the trie.
+         */
+        public void insert(String word) {
+            TrieNode cur = root;
+            for (int i = 0; i < word.length(); i++) {
+                int idx = word.charAt(i) - 'a';
+                if (cur.next[idx] == null) {
+                    cur.next[idx] = new TrieNode();
+                }
+                cur = cur.next[idx];
+            }
+            cur.isWord = true;
+        }
+
+        /**
+         * 找给定successor字符串的匹配前缀字符串
+         */
+        public String bizSearchPrefix(String word) {
+            TrieNode cur = root;
+            StringBuilder sb = new StringBuilder();
+            for (char c : word.toCharArray()) {
+                int i = c - 'a';
+                if (cur.next[i] == null) {
+                    return word;
+                }
+                sb.append(c);
+                cur = cur.next[i];
+                if (cur.isWord) {
+                    return sb.toString();
+                }
+            }
+            return word;
+        }
     }
 }

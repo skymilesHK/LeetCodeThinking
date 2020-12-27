@@ -7,16 +7,17 @@ import java.util.stream.IntStream;
 public class Solution {
 
     public static void main(String[] args) {
-        List<String> list = Arrays.asList("hello", "hi", "helo");
-        LeetCode526 leetCode = new LeetCode526();
-        int[] a = {3,5,9};
-        leetCode.countArrangement(3);
+        List<String> list = Arrays.asList("hello", "leetcode");
+        String[] a = {"apple"};
+        LeetCode745 leetCode = new LeetCode745(a);
+        leetCode.f("a", "e");
     }
 
 }
 
 class Trie {
-    class TrieNode {
+
+    public class TrieNode {
         public boolean isWord;
         public TrieNode[] next;
 
@@ -26,7 +27,7 @@ class Trie {
         }
     }
 
-    TrieNode root;
+    TrieNode root = null;
 
     /** Initialize your data structure here. */
     public Trie() {
@@ -36,106 +37,45 @@ class Trie {
     /** Inserts a word into the trie. */
     public void insert(String word) {
         TrieNode cur = root;
-        dfsInsert(word, cur, 0);
-    }
-
-    private void dfsInsert(String word, TrieNode node, int u) {
-        if (u == word.length()) {
-            node.isWord = true;
-            return;
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (cur.next[idx] == null) {
+                cur.next[idx] = new TrieNode();
+            }
+            cur = cur.next[idx];
         }
-
-        char ch = word.charAt(u);
-        if (node.next[ch - 'a'] == null) {
-            node.next[ch - 'a'] = new TrieNode();
-        }
-
-        dfsInsert(word, node.next[ch - 'a'], u + 1);
+        cur.isWord = true;
     }
 
     /**
      * Returns if the word is in the trie.
      */
     public boolean search(String word) {
-        TrieNode curr = root;
-        return dfsSearch(word, curr, 0);
-    }
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (cur.next[idx] == null) {
+                return false;
+            }
+            cur = cur.next[idx];
+        }
 
-    private boolean dfsSearch(String word, TrieNode node, int u) {
-        if (u == word.length()) {
-            return node.isWord;
-        }
-        char ch = word.charAt(u);
-        if (node.next[ch - 'a'] == null) {
-            return false;
-        } else {
-            return dfsSearch(word, node.next[ch - 'a'], u + 1);
-        }
+        return cur.isWord;
     }
 
     /**
      * Returns if there is any word in the trie that starts with the given prefix.
      */
     public boolean startsWith(String prefix) {
-        TrieNode curr = root;
-        return dfsStartsWith(prefix, curr, 0);
+        TrieNode cur = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            int idx = prefix.charAt(i) - 'a';
+            if (cur.next[idx] == null) {
+                return false;
+            }
+            cur = cur.next[idx];
+        }
+        return true;
     }
 
-    private boolean dfsStartsWith(String prefix, TrieNode node, int u) {
-        if (u == prefix.length()) {
-            return true;
-        }
-
-        char ch = prefix.charAt(u);
-        if (node.next[ch - 'a'] == null) {
-            return false;
-        } else {
-            return dfsStartsWith(prefix, node.next[ch - 'a'], u + 1);
-        }
-    }
-
-
-    /** Inserts a word into the trie. */
-//    public void insert(String word) {
-//        TrieNode cur = root;
-//        for (int i = 0; i < word.length(); i++) {
-//            char ch = word.charAt(i);
-//            if (cur.next[ch - 'a'] == null) {
-//                cur.next[ch - 'a'] = new TrieNode();
-//            }
-//
-//            cur = cur.next[ch - 'a'];
-//        }
-//        if (!cur.isWord) {
-//            cur.isWord = true;
-//        }
-//    }
-
-    /** Returns if the word is in the trie. */
-//    public boolean search(String word) {
-//        TrieNode cur = root;
-//        for (int i = 0; i < word.length(); i++) {
-//            char ch = word.charAt(i);
-//            if (cur.next[ch - 'a'] == null) {
-//                return false;
-//            }
-//            cur = cur.next[ch - 'a'];
-//        }
-//
-//        return cur.isWord;
-//    }
-
-    /** Returns if there is any word in the trie that starts with the given prefix. */
-//    public boolean startsWith(String prefix) {
-//        TrieNode cur = root;
-//        for (int i = 0; i < prefix.length(); i++) {
-//            char ch = prefix.charAt(i);
-//            if (cur.next[ch - 'a'] == null) {
-//                return false;
-//            }
-//            cur = cur.next[ch - 'a'];
-//        }
-//
-//        return true;
-//    }
 }

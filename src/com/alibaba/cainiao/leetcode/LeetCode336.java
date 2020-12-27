@@ -32,6 +32,9 @@ public class LeetCode336 {
             }
         }
 
+        // 输入：["abcd","dcba","lls","s","sssll"]
+        // 输出：[[0,1],[1,0],[3,2],[2,4]]
+        // 解释：可拼接成的回文串为 ["dcbaabcd","abcddcba","slls","llssssll"]
         // 枚举每个字符串，切分字符串
         for (int i = 0; i < words.length; i++) {
             String w = words[i];
