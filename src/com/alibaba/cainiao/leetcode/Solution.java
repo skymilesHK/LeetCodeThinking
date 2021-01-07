@@ -1,51 +1,66 @@
 package com.alibaba.cainiao.leetcode;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.awt.Point;
 
 public class Solution {
 
     public static void main(String[] args) {
         List<String> list = Arrays.asList("hello", "leetcode");
-        int[] a = {1,1,2};
-        int[] b = {9};
-        LeetCode66 leetCode = new LeetCode66();
-        System.out.println(leetCode.plusOne(b));
+        int[] a = {1,0,0,0,1};
+        int[][] b = {
+                {1,1,0},
+                {1,0,1},
+                {0,0,0}
+        };
+
+        LeetCode832 leetCode = new LeetCode832();
+        leetCode.flipAndInvertImage(b);
     }
 
-    // https://blog.csdn.net/linhuanmars/article/details/24389549
-    // http://www.cnblogs.com/springfor/p/3884034.html (参考 int len = rootIndex - inStart;这段代码)
-    // https://www.bilibili.com/video/av61190561 (这段讲解)
-
-    private HashMap<Integer, Integer> inOrderMap = new HashMap<>();
-    private int n = 0;
-
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        n = inorder.length;
-        for (int i = 0; i < n; i++) {
-            inOrderMap.put(inorder[i], i);
+    // 本来完全没思路
+    // https://leetcode-cn.com/problems/image-overlap/solution/javajie-fa-chao-ji-xiang-xi-de-jie-xi-by-coder_hez/
+    public int largestOverlap(int[][] A, int[][] B) {
+        List<Point> listA = new ArrayList<>(A.length * A.length), listB = new ArrayList<>(B.length * B.length);
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < B.length; j++) {
+                //将等于1的点添加进去。
+                if (A[i][j] == 1) {
+                    listA.add(new Point(i, j));
+                }
+                if (B[i][j] == 1) {
+                    listB.add(new Point(i, j));
+                }
+            }
         }
 
-        return dfs(preorder, 0, n - 1, inorder, 0, n - 1);
-    }
+        Set<Point> BSet = new HashSet(listB);
 
-    private TreeNode dfs(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
-        if (preStart > preEnd || inStart > inEnd) {
-            return null;
+        int res = 0;
+        Set<Point> seen = new HashSet();
+        for (Point a : listA) {
+            //对应A中每个1去与B中每个1去重合
+            for (Point b : listB) {
+                //这个delta可以理解为A中的点a要走到b这个点需要走多少。例如A中第一个1，走到B中第1个1
+                //需要右移动1（b.x-a.x），向下移动1（b.y-a.y）。
+                Point delta = new Point(b.x - a.x, b.y - a.y);
+                //为了避免相同的位移。比如A中（0，1）处的1想到B中（1，2）处的1也是需要向右移动1，向下移动1
+                //那么我们之前计算过一遍就不需要再计算一次了。
+                if (!seen.contains(delta)) {
+                    seen.add(delta);
+                    int candi = 0;
+                    //对于listA中的每个点都加上位移，去判断是否与B重合
+                    for (Point pa : listA) {
+                        if (BSet.contains(new Point(pa.x + delta.x, pa.y + delta.y))) {
+                            candi++;
+                        }
+                    }
+                    res = Math.max(res, candi);
+                }
+            }
         }
 
-        // 先序遍历的从左数第一个为整棵树的根节点
-        int rootVal = preorder[preStart];
-        // 先序的第一个是root, 通过map获取下标
-        int inRootIndex = inOrderMap.get(rootVal);
-        // 记录左子树的长度, 维护区间
-        int leftLen = inRootIndex - inStart;
-
-        TreeNode root = new TreeNode(rootVal);
-        root.left = dfs(preorder, preStart + 1, preStart + leftLen, inorder, inStart, inRootIndex - 1);
-        root.right = dfs(preorder, preStart + leftLen + 1, preEnd, inorder, inRootIndex + 1, inEnd);
-        return root;
+        return res;
     }
 }
 
