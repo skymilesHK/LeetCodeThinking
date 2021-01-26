@@ -21,7 +21,7 @@ public class LeetCode64 {
         // dp[i][j]表示走到[i][j]点，所有路径中路径sum的最小值
         int[][] dp = new int[m][n];
         for (int i = 0; i < m; i++) {
-            Arrays.fill(dp[i], Integer.MAX_VALUE);
+            Arrays.fill(dp[i], 0x3f3f3f);
         }
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {

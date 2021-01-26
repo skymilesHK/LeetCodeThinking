@@ -25,7 +25,7 @@ import java.util.List;
  * 注意：输入类型已在 2019 年 4 月 15 日更改。请重置为默认代码定义以获取新的方法签名。
  */
 public class LeetCode57 {
-    // https://www.acwing.com/video/1394/
+    // https://www.youtube.com/watch?v=E9IYRG_WYcM
     public int[][] insert(int[][] intervals, int[] newInterval) {
         List<int[]> res = new ArrayList<>();
         int k = 0;

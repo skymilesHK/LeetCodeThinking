@@ -7,60 +7,38 @@ public class Solution {
 
     public static void main(String[] args) {
         List<String> list = Arrays.asList("hello", "leetcode");
-        int[] a = {1,0,0,0,1};
+        int[] a = {1,2,3};
         int[][] b = {
-                {1,1,0},
-                {1,0,1},
+                {0,0,0},
+                {0,1,0},
                 {0,0,0}
         };
 
-        LeetCode832 leetCode = new LeetCode832();
-        leetCode.flipAndInvertImage(b);
+        LeetCode713 leetCode = new LeetCode713();
+        int circular = leetCode.numSubarrayProductLessThanK(a, 0);
     }
 
-    // 本来完全没思路
-    // https://leetcode-cn.com/problems/image-overlap/solution/javajie-fa-chao-ji-xiang-xi-de-jie-xi-by-coder_hez/
-    public int largestOverlap(int[][] A, int[][] B) {
-        List<Point> listA = new ArrayList<>(A.length * A.length), listB = new ArrayList<>(B.length * B.length);
-        for (int i = 0; i < A.length; i++) {
-            for (int j = 0; j < B.length; j++) {
-                //将等于1的点添加进去。
-                if (A[i][j] == 1) {
-                    listA.add(new Point(i, j));
-                }
-                if (B[i][j] == 1) {
-                    listB.add(new Point(i, j));
-                }
+    // https://www.cnblogs.com/grandyang/p/8627783.html
+    public int smallestDistancePair(int[] nums, int k) {
+        int n = nums.length;
+        int N = 1000001;
+        // index 是 两数距离差，value是两数距离差出现的次数
+        int[] bucket = new int[N];
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int dis = Math.abs(nums[i] - nums[j]);
+                ++bucket[dis];
             }
         }
 
-        Set<Point> BSet = new HashSet(listB);
-
-        int res = 0;
-        Set<Point> seen = new HashSet();
-        for (Point a : listA) {
-            //对应A中每个1去与B中每个1去重合
-            for (Point b : listB) {
-                //这个delta可以理解为A中的点a要走到b这个点需要走多少。例如A中第一个1，走到B中第1个1
-                //需要右移动1（b.x-a.x），向下移动1（b.y-a.y）。
-                Point delta = new Point(b.x - a.x, b.y - a.y);
-                //为了避免相同的位移。比如A中（0，1）处的1想到B中（1，2）处的1也是需要向右移动1，向下移动1
-                //那么我们之前计算过一遍就不需要再计算一次了。
-                if (!seen.contains(delta)) {
-                    seen.add(delta);
-                    int candi = 0;
-                    //对于listA中的每个点都加上位移，去判断是否与B重合
-                    for (Point pa : listA) {
-                        if (BSet.contains(new Point(pa.x + delta.x, pa.y + delta.y))) {
-                            candi++;
-                        }
-                    }
-                    res = Math.max(res, candi);
-                }
+        for (int i = 0; i < N; i++) {
+            if (bucket[i] < k) {
+                k -= bucket[i];
+            } else {
+                return i;
             }
         }
-
-        return res;
+        return -1;
     }
 }
 
