@@ -41,13 +41,30 @@ package com.alibaba.cainiao.leetcode;
  * nums 中的所有数字都 独一无二
  */
 public class LeetCode268 {
-    // https://www.acwing.com/video/1649/
-    public int missingNumber(int[] nums) {
+
+    //(前缀积)
+    //利用 prefix 数组当做临时存储空间，令 prefix[i] 为从 nums[0] * nums[1] * ... * num[i - 1]。
+    //然后从数组末尾，用变量 endProduct 记录末尾若干数字的乘积，每次更新 prefix[i] 即可得到答案。
+    //Input:  [1,2,3,4]
+    //Output: [24,12,8,6]
+    //https://www.acwing.com/video/1622/
+    public int[] productExceptSelf(int[] nums) {
         int n = nums.length;
-        int sum = n * (n + 1) / 2;
-        for (int x : nums) {
-            sum -= x;
+        // 前缀积
+        int[] prefix = new int[n];
+        prefix[0] = 1;
+        for (int i = 1; i < n; i++) {
+            prefix[i] = 1;
+            //不能是prefix[i - 1] * nums[i]，因为是前缀积，不是到当前数的积
+            prefix[i] = prefix[i - 1] * nums[i - 1];
         }
-        return sum;
+
+        int suffixProduct = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            prefix[i] *= suffixProduct;
+            suffixProduct *= nums[i];
+        }
+
+        return prefix;
     }
 }

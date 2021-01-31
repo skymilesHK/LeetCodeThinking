@@ -7,39 +7,42 @@ public class Solution {
 
     public static void main(String[] args) {
         List<String> list = Arrays.asList("hello", "leetcode");
-        int[] a = {1,2,3};
+        int[] a = {2,3,1,2,4,3};
         int[][] b = {
                 {0,0,0},
                 {0,1,0},
                 {0,0,0}
         };
 
-        LeetCode713 leetCode = new LeetCode713();
-        int circular = leetCode.numSubarrayProductLessThanK(a, 0);
+        char[] tasks = {'A','A','A','B','B','B'};
+        int n = 2;
+        LeetCode169 leetCode = new LeetCode169();
     }
 
-    // https://www.cnblogs.com/grandyang/p/8627783.html
-    public int smallestDistancePair(int[] nums, int k) {
+    public int findMin(int[] nums) {
         int n = nums.length;
-        int N = 1000001;
-        // index 是 两数距离差，value是两数距离差出现的次数
-        int[] bucket = new int[N];
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int dis = Math.abs(nums[i] - nums[j]);
-                ++bucket[dis];
+        if (n == 0) {
+            return 0;
+        }
+        if (n == 1) {
+            return nums[0];
+        }
+
+        int start = 0, end = n - 1, mid = 0;
+        while (start + 1 < end) {
+            mid = start + (end - start) / 2;
+            if (nums[mid] > nums[end]) {
+                start = mid;
+            } else if (nums[mid] < nums[end]) {
+                end = mid;
+            } else {
+                end--;
             }
         }
 
-        for (int i = 0; i < N; i++) {
-            if (bucket[i] < k) {
-                k -= bucket[i];
-            } else {
-                return i;
-            }
-        }
-        return -1;
+        return Math.min(nums[start], nums[end]);
     }
+
 }
 
 class Trie {
