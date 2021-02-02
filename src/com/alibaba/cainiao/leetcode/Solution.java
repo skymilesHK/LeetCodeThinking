@@ -5,44 +5,43 @@ import java.awt.Point;
 
 public class Solution {
 
+    static int[][] b = {
+            {1,2,3},
+            {4,5,6},
+            {7,8,9}
+    };
+
     public static void main(String[] args) {
         List<String> list = Arrays.asList("hello", "leetcode");
         int[] a = {2,3,1,2,4,3};
-        int[][] b = {
-                {0,0,0},
-                {0,1,0},
-                {0,0,0}
-        };
 
         char[] tasks = {'A','A','A','B','B','B'};
         int n = 2;
         LeetCode169 leetCode = new LeetCode169();
+        rotate(b);
     }
 
-    public int findMin(int[] nums) {
-        int n = nums.length;
-        if (n == 0) {
-            return 0;
-        }
-        if (n == 1) {
-            return nums[0];
-        }
-
-        int start = 0, end = n - 1, mid = 0;
-        while (start + 1 < end) {
-            mid = start + (end - start) / 2;
-            if (nums[mid] > nums[end]) {
-                start = mid;
-            } else if (nums[mid] < nums[end]) {
-                end = mid;
-            } else {
-                end--;
+    // https://leetcode.com/problems/rotate-image/discuss/18879/AC-Java-in-place-solution-with-explanation-Easy-to-understand.
+    static public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        // 按照对角线翻
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int t = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = t;
             }
         }
 
-        return Math.min(nums[start], nums[end]);
+        // 对折交换
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n / 2; j++) {
+                int t = matrix[i][j];
+                matrix[i][j] = matrix[i][n - 1 - j];
+                matrix[i][n - 1 - j] = t;
+            }
+        }
     }
-
 }
 
 class Trie {
