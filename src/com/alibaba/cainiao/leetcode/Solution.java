@@ -18,29 +18,53 @@ public class Solution {
         char[] tasks = {'A','A','A','B','B','B'};
         int n = 2;
         LeetCode169 leetCode = new LeetCode169();
-        rotate(b);
     }
 
-    // https://leetcode.com/problems/rotate-image/discuss/18879/AC-Java-in-place-solution-with-explanation-Easy-to-understand.
-    static public void rotate(int[][] matrix) {
-        int n = matrix.length;
-        // 按照对角线翻
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int t = matrix[i][j];
-                matrix[i][j] = matrix[j][i];
-                matrix[j][i] = t;
+    // https://www.acwing.com/video/1846/
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        // 需要dummy
+        var h1 = reverse(l1);
+        var h2 = reverse(l2);
+        var dummy = new ListNode(-1);
+        int carry = 0;
+        while (h1 != null || h2 != null) {
+            if (h1 != null) {
+                carry += h1.val;
+                h1 = h1.next;
             }
+
+            if (h2 != null) {
+                carry += h2.val;
+                h2 = h2.next;
+            }
+
+            var cur = new ListNode(carry % 10);
+            carry /= 10;
+
+            //头插入
+            cur.next = dummy.next;
+            dummy.next = cur;
         }
 
-        // 对折交换
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n / 2; j++) {
-                int t = matrix[i][j];
-                matrix[i][j] = matrix[i][n - 1 - j];
-                matrix[i][n - 1 - j] = t;
-            }
+        return dummy.next;
+    }
+
+    private ListNode reverse(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
         }
+
+        var a = head;
+        var b = head.next;
+        var c = b;
+        while (b != null) {
+            c = b.next;
+            b.next = a;
+            a = b;
+            b = c;
+        }
+        head.next = null;
+        return a;
     }
 }
 
