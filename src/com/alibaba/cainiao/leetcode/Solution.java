@@ -5,67 +5,56 @@ import java.awt.Point;
 
 public class Solution {
 
-    static int[][] b = {
-            {1,2,3},
-            {4,5,6},
-            {7,8,9}
-    };
-
     public static void main(String[] args) {
-        List<String> list = Arrays.asList("hello", "leetcode");
-        int[] a = {2,3,1,2,4,3};
+        // creating tree map
+        TreeMap<Integer, String> treemap = new TreeMap<Integer, String>();
 
-        char[] tasks = {'A','A','A','B','B','B'};
-        int n = 2;
-        LeetCode169 leetCode = new LeetCode169();
+        // populating tree map
+        treemap.put(2, "two");
+        treemap.put(1, "one");
+        treemap.put(3, "three");
+//        treemap.put(6, "six");
+        treemap.put(5, "five");
+
+        System.out.println("Checking floor entry for 6");
+        System.out.println("Value is: "+ treemap.floorEntry(6));
     }
 
-    // https://www.acwing.com/video/1846/
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        // 需要dummy
-        var h1 = reverse(l1);
-        var h2 = reverse(l2);
-        var dummy = new ListNode(-1);
-        int carry = 0;
-        while (h1 != null || h2 != null) {
-            if (h1 != null) {
-                carry += h1.val;
-                h1 = h1.next;
+    // https://leetcode-cn.com/problems/nth-magical-number/solution/er-fen-shuang-wai-wai-by-zzxn/
+    // https://www.acwing.com/solution/content/582/   gcd,lcm操作
+    long mod = (long) (1E9 + 7);
+    public int nthMagicalNumber(int n, int a, int b) {
+        if (a > b) {
+            return nthMagicalNumber(n, b, a);
+        }
+
+        long lcm = (long) a * b / gcd(a, b);
+        long start = 1, end = lcm * n, mid = 1;
+        while (start + 1 < end) {
+            mid = (start + end) / 2;
+            if (check(mid, a, b, lcm) >= n) {
+                end = mid;
+            } else {
+                start = mid;
             }
-
-            if (h2 != null) {
-                carry += h2.val;
-                h2 = h2.next;
-            }
-
-            var cur = new ListNode(carry % 10);
-            carry /= 10;
-
-            //头插入
-            cur.next = dummy.next;
-            dummy.next = cur;
         }
 
-        return dummy.next;
+        if (check(start, a, b, lcm) <= n) {
+            return (int) (start / mod);
+        } else {
+            return (int) (end / mod);
+        }
     }
 
-    private ListNode reverse(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
-
-        var a = head;
-        var b = head.next;
-        var c = b;
-        while (b != null) {
-            c = b.next;
-            b.next = a;
-            a = b;
-            b = c;
-        }
-        head.next = null;
-        return a;
+    private int gcd(int a, int b) {
+        return b != 0 ? gcd(b, a % b) : a;
     }
+
+    private long check(long mid, long a, long b, long lcm) {
+        // 小于等于i的神奇数字数量
+        return mid / a + mid / b - mid / lcm;
+    }
+
 }
 
 class Trie {
