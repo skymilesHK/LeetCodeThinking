@@ -8,10 +8,18 @@ import java.util.stream.Collectors;
 
 public class Main {
 
+    private static volatile int count = 0;
+
     public static void main(String[] args) {
-        String s = "1";
-        System.out.println(0 ^ 1);
     }
 
+    class Task implements Runnable {
 
+        @Override
+        public void run() {
+            while (count <= 100) {
+
+            }
+        }
+    }
 }

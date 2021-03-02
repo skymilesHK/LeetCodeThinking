@@ -2,6 +2,8 @@ package com.alibaba.cainiao.leetcode;
 
 import java.util.*;
 import java.awt.Point;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Solution {
 
@@ -20,41 +22,15 @@ public class Solution {
         System.out.println("Value is: "+ treemap.floorEntry(6));
     }
 
-    // https://leetcode-cn.com/problems/nth-magical-number/solution/er-fen-shuang-wai-wai-by-zzxn/
-    // https://www.acwing.com/solution/content/582/   gcd,lcm操作
-    long mod = (long) (1E9 + 7);
-    public int nthMagicalNumber(int n, int a, int b) {
-        if (a > b) {
-            return nthMagicalNumber(n, b, a);
+    // https://www.youtube.com/watch?v=5a_AlfATYEU
+    public String orderlyQueue(String S, int K) {
+        if (S.length() >= 2) {
+            char[] chars = S.toCharArray();
+            Arrays.sort(chars);
+            return new String(chars);
         }
-
-        long lcm = (long) a * b / gcd(a, b);
-        long start = 1, end = lcm * n, mid = 1;
-        while (start + 1 < end) {
-            mid = (start + end) / 2;
-            if (check(mid, a, b, lcm) >= n) {
-                end = mid;
-            } else {
-                start = mid;
-            }
-        }
-
-        if (check(start, a, b, lcm) <= n) {
-            return (int) (start / mod);
-        } else {
-            return (int) (end / mod);
-        }
+        return S;
     }
-
-    private int gcd(int a, int b) {
-        return b != 0 ? gcd(b, a % b) : a;
-    }
-
-    private long check(long mid, long a, long b, long lcm) {
-        // 小于等于i的神奇数字数量
-        return mid / a + mid / b - mid / lcm;
-    }
-
 }
 
 class Trie {
