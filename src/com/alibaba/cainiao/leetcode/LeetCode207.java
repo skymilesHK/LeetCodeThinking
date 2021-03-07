@@ -72,7 +72,7 @@ public class LeetCode207 {
             // t节点
             Integer t = q.poll();
             res[resIdx++] = t;
-            //遍历头节点的每一个出边,这里i表示出边节点下标
+            //遍历头节点的每一个出边,这里i表示出边节点编号
             for (int i = h[t]; i != -1; i = next[i]) {
                 // 出边的点j
                 int j = e[i];
