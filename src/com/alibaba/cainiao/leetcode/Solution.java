@@ -1,52 +1,56 @@
 package com.alibaba.cainiao.leetcode;
 
-import java.util.*;
-import java.awt.Point;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Arrays;
 
 public class Solution {
 
-    // 看视频1:23秒讲解领接表 https://www.acwing.com/video/21/
-    public static void main(String[] args) {
-        // creating tree map
-        TreeMap<Integer, String> treemap = new TreeMap<Integer, String>();
+    public boolean canPartition(int[] nums) {
+        /**
+         * ①状态定义：dp[i][j]表示从数组的 [0, i] 这个子区间内挑选一些正整数，每个数只能用一次，使得这些数的和恰好等于j是否成立，成立为true
+         * ②状态转移方程(分类讨论)：
+         *  a.不选择i位置的值：dp[i][j] = dp [i - 1][j]
+         *  b.选择i位置的值:
+         *      I.当j > nums[i]时, dp[i][j] = dp [i - 1][j] || dp [i - 1][j - nums[i]]
+         *     II.当j = nums[i]时，dp[i][j] = true
+         *    III.当j < nums[i]时, dp[i][j] = dp [i - 1][j] （dp [i - 1][j - nums[i]]不存在）
+         */
+        int len = nums.length;
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        //sum为奇数，不符合题意，返回false
+        if ((sum & 1) == 1) {
+            return false;
+        }
+        //定义背包target
+        int target = sum / 2;
+        //定义dp
+        boolean[][] dp = new boolean[len][target + 1];
+        //初始化初值:第一行只有第1个数只能让容积为它自己的背包恰好装满
+        dp[0][0] = true;
+        if (nums[0] <= target) {
+            dp[0][nums[0]] = true;
+        }
 
-        // populating tree map
-        treemap.put(2, "two");
-        treemap.put(1, "one");
-        treemap.put(3, "three");
-//        treemap.put(6, "six");
-        treemap.put(5, "five");
-
-        System.out.println("Checking floor entry for 6");
-        System.out.println("Value is: "+ treemap.floorEntry(6));
-
-
-    }
-
-    // https://www.acwing.com/solution/content/526/
-    public int scheduleCourse(int[][] courses) {
-        //根据课程结束时间升序排列
-        Arrays.sort(courses, (a, b) -> (a[1] - b[1]));
-        //课程用时的大根优先级队列
-        Queue<Integer> queue = new PriorityQueue<>((a, b) -> (b - a));
-        int times = 0;
-        for (int i = 0; i < courses.length; i++) {
-            //如果此课程可以学习，则学习，总用时增加，此课程用时入堆
-            queue.add(courses[i][0]);
-            if (times + courses[i][0] <= courses[i][1]) {
-                times += courses[i][0];
-            } else {
-                //如果不能学习此课程，因为此课程结束时间比之前所有的都晚，存在两种情况：
-                //1.此课程用时比之前某个课程少：则学习此课程，放弃之前用时最长的课程
-                //2.此课程用时比之前所有课程多：则不学习此课程，可以理解为学习此课程，同时放弃之前用时最长的课程（此课程）
-                //则此种情况，学习此课程并放弃之前用时最长的课程（总用时减去大根堆堆顶）
-                times = times + courses[i][0] - queue.poll();
+        //开始填表[1,len - 1]
+        for (int i = 1; i < len; i++) {
+            for (int j = 0; j <= target; j++) {
+                if (j >= nums[i]) {
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i]];
+                } else {
+                    //对应两种情况：j<nums[i]和当前背包不选i
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+            //判断是否需要提前结束计算
+            if (dp[i][target]) {
+                return true;
             }
         }
-        return queue.size();
+        return dp[len - 1][target];
     }
+
 }
 
 class Trie {

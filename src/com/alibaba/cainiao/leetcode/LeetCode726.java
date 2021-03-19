@@ -46,144 +46,72 @@ import java.util.stream.Collectors;
  */
 public class LeetCode726 {
 
-    int i = 0;
+    private int idx = 0;
 
     public String countOfAtoms(String formula) {
-        int n = formula.length();
-        Deque<TreeMap<String/**当前括号内的字符**/, Integer/**当前括号内单个字符个数**/>> stack = new ArrayDeque<>(n);
-        TreeMap<String, Integer> curMap = new TreeMap<>();
-        while (i < n) {
-            char ch = formula.charAt(i);
-            if (ch == '(') {
-                i++;
-                stack.push(curMap);
-                curMap = new TreeMap<>();
-            } else if (ch == ')') {
-                // 两个map合并
-                TreeMap<String, Integer> temp = curMap;
-                curMap = stack.pop();
-                i++;
-                int cnt = getNum(formula);
-                for (Map.Entry<String, Integer> entry : temp.entrySet()) {
-                    // "Mg(OH)2"
-                    String k = entry.getKey();
-                    Integer v = entry.getValue();
-                    curMap.put(k, curMap.getOrDefault(k, 0) + v * cnt);
+        if (formula.length() == 0) {
+            return "";
+        }
+        TreeMap<String, Integer> treeMap = dfs(formula);
+        StringBuilder sb = new StringBuilder(formula.length());
+        // 收集结果并显示打印，这个逻辑也Ok，如果数量为1，则省略
+        treeMap.forEach((k, v) -> {
+            sb.append(k);
+            if (v > 1) {
+                sb.append(v);
+            }
+        });
+
+        return sb.toString();
+    }
+
+    private TreeMap<String, Integer> dfs(String s) {
+        TreeMap<String, Integer> levelMap = new TreeMap<>();
+        while (idx < s.length()) {
+            if (s.charAt(idx) == '(') {
+                //遇到左括号的时候，开始递归求解（）内部的串的解析结果，然后结果返回给tmp, tmp的结果和当前的结果合并
+                idx++;
+                TreeMap<String, Integer> tmp = dfs(s);
+                int count = getCount(s);    //括号外面的次数
+
+                // 更新levelMap,和当前的结果合并
+                for (Map.Entry<String, Integer> entry : tmp.entrySet()) {
+                    String key = entry.getKey();
+                    Integer value = entry.getValue();
+                    levelMap.put(key, levelMap.getOrDefault(key, 0) + value * count);
                 }
+            } else if (s.charAt(idx) == ')') {
+                // ')'括号退栈
+                idx++;
+                return levelMap;
             } else {
-                String name = getName(formula);
-                int num = getNum(formula);
-                curMap.put(name, curMap.getOrDefault(name, 0) + num);
+                // 开头不可能是数字，一定是大写字符,跳过
+                String name = getName(s);
+                levelMap.put(name, levelMap.getOrDefault(name, 0) + getCount(s));
             }
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (String name : curMap.keySet()) {
-            int quantity = curMap.get(name);
-            sb.append(name);
-            if (quantity > 1) {
-                sb.append(quantity);
-            }
+        return levelMap;
+    }
+
+    private String getName(String s) {
+        // 开头是大写数字
+        StringBuilder sb = new StringBuilder(s.length());
+        sb.append(s.charAt(idx++));
+
+        while (idx < s.length() && 'a' <= s.charAt(idx) && s.charAt(idx) <= 'z') {
+            sb.append(s.charAt(idx++));
         }
         return sb.toString();
     }
 
-    private int getNum(String formula) {
-        int n = formula.length();
-        if (i == n || !(formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
-            return 1;
+    //根据全局变量i，来寻找以i位置打头的数字的串，例如12
+    private int getCount(String s) {
+        int count = 0;
+        while (idx < s.length() && Character.isDigit(s.charAt(idx))) {
+            count = count * 10 + (s.charAt(idx) - '0');
+            idx++;
         }
-
-        int cnt = 0;
-        while (i < n && (formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
-            cnt = cnt * 10 + formula.charAt(i) - '0';
-            i++;
-        }
-
-        return cnt;
-    }
-
-    private String getName(String formula) {
-        int n = formula.length();
-        // 第一个化学元素的大写字符
-        StringBuilder name = new StringBuilder();
-        name.append(formula.charAt(i));
-        i++;
-
-        // 余下化学元素的小写字符
-        while (i < n && formula.charAt(i) >= 'a' && formula.charAt(i) <= 'z') {
-            name.append(formula.charAt(i));
-            i++;
-        }
-        return name.toString();
-    }
-}
-
-// SimpleEntry 参考
-class Pair<K, V> implements Map.Entry<K, V>, Comparable<K> {
-
-    private K key;
-    private V value;
-
-    public Pair() {
-    }
-
-    public Pair(K key, V value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    @Override
-    public K getKey() {
-        return key;
-    }
-
-    @Override
-    public V getValue() {
-        return value;
-    }
-
-    @Override
-    public V setValue(V value) {
-        V oldValue = this.value;
-        this.value = value;
-        return oldValue;
-    }
-
-    @Override
-    public int hashCode() {
-        return (key == null ? 0 : key.hashCode())
-                ^ (value == null ? 0 : value.hashCode());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(this == obj){
-            return true;    //地址相等
-        }
-        if(obj == null){
-            return false;   //非空性：对于任意非空引用x，x.equals(null)应该返回false。
-        }
-
-        if (obj instanceof Map.Entry) {
-            Map.Entry<? extends K, ? extends V> o = (Map.Entry<? extends K, ? extends V>) obj;
-            return eq(key, o.getKey()) && eq(value, o.getValue());
-        }
-
-        return false;
-    }
-
-    private static boolean eq(Object o1, Object o2) {
-        return o1 == null ? o2 == null : o1.equals(o2);
-    }
-
-    @Override
-    public int compareTo(K obj) {
-        if (obj instanceof String && this.key instanceof String) {
-            String k = (String) this.key;
-            String o = (String) obj;
-            return k.compareTo(o);
-        }
-        return 0;
+        return count == 0 ? 1 : count;
     }
 }

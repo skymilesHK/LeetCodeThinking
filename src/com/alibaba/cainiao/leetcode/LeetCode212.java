@@ -71,6 +71,11 @@ public class LeetCode212 {
 
         TrieNode root = null;
 
+        /** Initialize your data structure here. */
+        public Trie() {
+            root = new TrieNode();
+        }
+
         /** Inserts a word into the trie. */
         public void insert(String word) {
             insertDFS(word, 0, root);
