@@ -1,80 +1,93 @@
 package com.alibaba.cainiao.leetcode;
 
 import java.math.BigDecimal;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 149. Max Points on a Line
- * Hard
+ * 146. LRU Cache
+ * Medium
+ *
+ * 8059
+ *
+ * 329
+ *
+ * Add to List
+ *
+ * Share
+ * Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+ *
+ * Implement the LRUCache class:
+ *
+ * LRUCache(int capacity) Initialize the LRU cache with positive size capacity.
+ * int get(int key) Return the value of the key if the key exists, otherwise return -1.
+ * void put(int key, int value) Update the value of the key if the key exists. Otherwise, add the key-value pair to the cache. If the number of keys exceeds the capacity from this operation, evict the least recently used key.
+ * Follow up:
+ * Could you do get and put in O(1) time complexity?
  *
  *
- * Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
  *
  * Example 1:
  *
- * Input: [[1,1],[2,2],[3,3]]
- * Output: 3
- * Explanation:
- * ^
- * |
- * |        o
- * |     o
- * |  o
- * +------------->
- * 0  1  2  3  4
- * Example 2:
+ * Input
+ * ["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+ * [[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+ * Output
+ * [null, null, null, 1, null, -1, null, -1, 3, 4]
  *
- * Input: [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]
- * Output: 4
- * Explanation:
- * ^
- * |
- * |  o
- * |     o        o
- * |        o
- * |  o        o
- * +------------------->
- * 0  1  2  3  4  5  6
- * NOTE: input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
+ * Explanation
+ * LRUCache lRUCache = new LRUCache(2);
+ * lRUCache.put(1, 1); // cache is {1=1}
+ * lRUCache.put(2, 2); // cache is {1=1, 2=2}
+ * lRUCache.get(1);    // return 1
+ * lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+ * lRUCache.get(2);    // returns -1 (not found)
+ * lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+ * lRUCache.get(1);    // return -1 (not found)
+ * lRUCache.get(3);    // return 3
+ * lRUCache.get(4);    // return 4
+ *
+ *
+ * Constraints:
+ *
+ * 1 <= capacity <= 3000
+ * 0 <= key <= 3000
+ * 0 <= value <= 104
+ * At most 3 * 104 calls will be made to get and put.
  */
+
 public class LeetCode146 {
-    // https://www.acwing.com/video/1520/
-    public int maxPoints(int[][] points) {
-        // 数目 = max(垂直点个数, 同一个斜率k的个数) + 重叠的点
-        int res = 0;
-        // 固定一个点，遍历另外一个点
-        for (int[] p : points) {
-            int sn = 0, vn = 0;
-            Map<Double, Integer> map = new HashMap<>(points.length);
-            for (int[] q : points) {
-                if (p[0] == q[0] && p[1] == q[1]) {
-                    sn++;
-                } else if (p[0] == q[0]) {
-                    vn++;
-                } else {
-                    double k = div((double) q[1] - p[1], (double) q[0] - p[0]);
-                    map.put(k, map.getOrDefault(k, 0) + 1);
-                }
-            }
 
-            int cnt = sn;
-            int max = vn;
-            for (Integer v : map.values()) {
-                max = Math.max(max, v);
-            }
-            cnt += max;
-            res = Math.max(res, cnt);
-        }
+    Deque<Integer> dataStack = null;    // 数据栈
+    Deque<Integer> minStack = null;     // 辅助栈
 
-        return res;
+    public LeetCode146(int capacity) {
+        dataStack = new ArrayDeque<>();
+        minStack = new ArrayDeque<>();
     }
 
-    //相对精确的除法运算，当发生除不尽的情况时，精确到小数点以后指定精度(scale)，再往后的数字四舍五入
-    private double div(double y, double x) {
-        BigDecimal by = BigDecimal.valueOf(y);
-        BigDecimal bx = BigDecimal.valueOf(x);
-        return by.divide(bx, 9, BigDecimal.ROUND_HALF_UP).doubleValue();
+    public void push(int x) {
+        dataStack.push(x);
+        if (minStack.isEmpty() || minStack.peek() >= x) {
+            minStack.push(x);
+        }
+    }
+
+    public void pop() {
+        int min = dataStack.pop();
+        if (min == minStack.peek()) {
+            minStack.pop();
+        }
+    }
+
+    public int top() {
+        return dataStack.peek();
+    }
+
+    public int getMin() {
+        return minStack.peek();
     }
 
 }
