@@ -35,12 +35,13 @@ public class LeetCode32 {
             } else {
                 // 右括号可以计算长度了
                 if (!stack.isEmpty()) {
-                   stack.pop();
-                   if (!stack.isEmpty()) {
-                       res = Math.max(res, i - stack.peek());
-                   } else {
-                       res = Math.max(res, i - start + 1);
-                   }
+                    Integer t = stack.pop();
+                    if (!stack.isEmpty()) {
+                        res = Math.max(res, i - stack.peek());
+                    } else {
+                        // ()
+                        res = Math.max(res, i - start + 1);
+                    }
                 } else {
                     // 栈为空，右括号，说明是无法匹配的右括号,记录下一个合法子串的起始位置
                     start = i + 1;

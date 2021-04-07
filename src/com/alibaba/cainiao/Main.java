@@ -16,7 +16,6 @@ public class Main {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] A = {4,6,15,35};
-        solution.largestComponentSize(A);
+        System.out.println("10".substring(1, 1));
     }
 }

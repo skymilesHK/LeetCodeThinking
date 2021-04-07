@@ -28,6 +28,7 @@ import java.util.List;
  */
 public class LeetCode67 {
 
+    // https://www.yuque.com/skymiles/av37cu/fq2emr
     public String addBinary(String a, String b) {
         List<Integer> A = new ArrayList<>(a.length());
         List<Integer> B = new ArrayList<>(b.length());

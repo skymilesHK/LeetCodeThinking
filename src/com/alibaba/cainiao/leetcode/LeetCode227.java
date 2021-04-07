@@ -29,56 +29,32 @@ import java.util.Map;
  * 请不要使用内置的库函数 eval。
  */
 public class LeetCode227 {
-    // https://www.acwing.com/video/1610/
-    Map<Character, Integer> priority = new HashMap<>();
-    public int calculate(String s) {
-        Deque<Integer> num = new ArrayDeque<>(s.length());
-        Deque<Character> op = new ArrayDeque<>(s.length());
-        priority.put('+', 1);
-        priority.put('-', 1);
-        priority.put('*', 2);
-        priority.put('/', 2);
-        s = "0" + s;
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            if (ch == ' ') {
-                continue;
-            } else if (Character.isDigit(ch)) {
-                int x = 0, j = i;
-                while (j < s.length() && Character.isDigit(s.charAt(j))) {
-                    x = x * 10 + (s.charAt(j++) - '0');
-                }
-                num.push(x);
-            } else {
-                // 运算符号
-                while (!op.isEmpty() && priority.get(op.peek()) >= priority.get(ch)) {
-                    eval(num, op);
-                }
-                op.push(ch);
+    public int expressiveWords(String S, String[] words) {
+        int res = 0;
+        for (String w : words) {
+            if (judge(S, w)) {
+                res++;
             }
         }
-        // 没有做完的op继续做
-        while (!op.isEmpty()) {
-            eval(num, op);
-        }
-
-        return num.pop();
+        return res;
     }
 
-    private void eval(Deque<Integer> num, Deque<Character> op) {
-        Integer b = num.pop();
-        Integer a = num.pop();
-        Character o = op.pop();
-        int res = 0;
-        if (o == '+') {
-            res = a + b;
-        } else if (o == '-') {
-            res = a - b;
-        } else if (o == '*') {
-            res = a * b;
-        } else {
-            res = a / b;
+    // S = "heeellooo"
+    // words = ["hello", "hi", "helo"]
+    private boolean judge(String s, String w) {
+        int sLen = s.length(), wLen = w.length(), i = 0, j = 0;
+        while (i < sLen) {
+            if (j < wLen && s.charAt(i) == w.charAt(j)) {
+                j++;
+            } else if (i >= 2 && s.charAt(i) == s.charAt(i - 1) && s.charAt(i - 1) == s.charAt(i - 2)) {
+                continue;
+            } else if(i + 1 < sLen && i > 0 && s.charAt(i) == s.charAt(i + 1) && s.charAt(i) == s.charAt(i - 1)) {
+                continue;
+            } else {
+                return false;
+            }
+            i++;
         }
-        num.push(res);
+        return j == wLen;
     }
 }
