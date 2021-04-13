@@ -5,29 +5,6 @@ import java.util.stream.Collectors;
 
 public class Solution {
 
-    // https://www.youtube.com/watch?v=gOycoA8pOqg
-    public String shiftingLetters(String S, int[] shifts) {
-        // shifts [3,5,9]
-        int[] postSum = new int[shifts.length];
-        int sum = 0;
-        for (int i = shifts.length - 1, idx = i; i >= 0 && idx >= 0; i--, idx--) {
-            sum = shifts[i] % 26;
-            if (idx == shifts.length - 1) {
-                postSum[idx] = sum;
-            } else {
-                postSum[idx] = postSum[idx + 1] + sum;
-            }
-        }
-
-        // S = "abc", postSum = [17,14,9], S的长度和shifts，postSum长度一样
-        StringBuilder sb = new StringBuilder(S);
-        for (int i = 0; i < S.length(); i++) {
-            sb.setCharAt(i, (char) ((sb.charAt(i) - 'a' + postSum[i]) % 26 + 'a'));
-        }
-
-        return sb.toString();
-    }
-
 }
 
 class Trie {
