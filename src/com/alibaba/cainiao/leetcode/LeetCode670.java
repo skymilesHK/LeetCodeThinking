@@ -1,5 +1,7 @@
 package com.alibaba.cainiao.leetcode;
 
+import java.util.Arrays;
+
 /**
  * 670. Maximum Swap
  * Medium
@@ -25,27 +27,41 @@ package com.alibaba.cainiao.leetcode;
  * The given number is in the range [0, 108]
  */
 public class LeetCode670 {
-    // https://leetcode-cn.com/problems/maximum-swap/solution/0ms-100-bu-miao-da-wo-by-wang-xue-lei-2-iyz9/
+    // https://www.acwing.com/video/2451/
     public int maximumSwap(int num) {
         char[] chars = Integer.toString(num).toCharArray();
-        // maxIdx是最大idx，maxIdxArr是每个数字左边出现更大下标的数组
-        int maxIdx = chars.length - 1;
-        int[] maxIdxArr = new int[chars.length];
-        for (int i = chars.length - 1; i >= 0; i--) {
-            if (chars[i] > chars[maxIdx]) {
-                maxIdx = i;
+        for (int i = 0, cnt = 0; i < chars.length - 1; i++) {
+            // 找第一个逆序
+            if (chars[i] < chars[i + 1]) {
+                if (cnt > 1) {
+                    break;
+                }
+
+                cnt++;
+                int k = i + 1;
+                for (int j = k; j < chars.length; j++) {
+                    if (chars[j] >= chars[k]) {
+                        k = j;
+                    }
+                }
+
+                for (int j = 0; j < k; j++) {
+                    if (chars[j] < chars[k]) {
+                        swap(chars, j, k);
+                        break;
+                    }
+                }
             }
-            maxIdxArr[i] = maxIdx;
         }
 
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[maxIdxArr[i]] > chars[i]) {
-                char temp = chars[maxIdxArr[i]];
-                chars[maxIdxArr[i]] = chars[i];
-                chars[i] = temp;
-                break;
-            }
-        }
         return Integer.parseInt(new String(chars));
+    }
+
+    private void swap(char[] chars, int i, int j) {
+        if (i != j) {
+            chars[i] ^= chars[j];
+            chars[j] ^= chars[i];
+            chars[i] ^= chars[j];
+        }
     }
 }

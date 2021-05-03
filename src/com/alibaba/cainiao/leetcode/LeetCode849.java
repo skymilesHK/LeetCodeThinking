@@ -5,35 +5,26 @@ package com.alibaba.cainiao.leetcode;
  * https://leetcode-cn.com/problems/maximize-distance-to-closest-person/
  */
 public class LeetCode849 {
-
+    // https://www.acwing.com/solution/content/862/     贪心
     public int maxDistToClosest(int[] seats) {
-        int count1 = 0;
-        int count2 = 0;
-        int i = 0, j = seats.length - 1;
-        // count1记录开头连续0的个数
-        while (seats[i] == 0) {
-            count1++;
-            i++;
-        }
+        int n = seats.length;
+        int lastIdx = -1, res = -1;
+        for (int i = 0; i < n; i++) {
+            if (seats[i] == 1) {
+                // 特殊处理第一个 1
+                if (res == -1) {
+                    res = i;
+                } else {
+                    res = Math.max(res, (i - lastIdx) / 2);
+                }
 
-        // count2记录结尾连续0的个数
-        while (seats[j] == 0) {
-            count2++;
-            j--;
-        }
-
-        // midZeroMaxCnt记录从第一个1到最后一个1之间，连续0的最大值
-        int midCnt = 0, midZeroMaxCnt = 0;
-        for (int k = i + 1; k <= j; k++) {
-            if (seats[k] == 0) {
-                midCnt++;
-            } else {
-                midZeroMaxCnt = Math.max(midZeroMaxCnt, midCnt);
-                midCnt = 0;
+                lastIdx = i;
             }
         }
 
-        return Math.max(Math.max(count1, count2), (midZeroMaxCnt + 1) / 2);
+        // 最后还需要试一下放到最后的位置上和 last 的距离，更新答案。
+        res = Math.max(res, n - 1 - lastIdx);
+        return res;
     }
 
 }

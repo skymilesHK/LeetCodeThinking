@@ -24,22 +24,22 @@ import java.util.Deque;
 public class LeetCode581 {
 
     // https://www.acwing.com/video/2040/
-//    public int findUnsortedSubarray(int[] nums) {
-//        // [2, 6, 4, 8, 10, 9, 15]
-//        // [2, 4, 6, 8, 9, 10, 15]
-//        int n = nums.length;
-//        int[] sortNums = Arrays.copyOf(nums, n);
-//        Arrays.sort(sortNums);
-//        int left = 0, right = n - 1;
-//        while (left < n && sortNums[left] == nums[left]) {
-//            left++;
-//        }
-//
-//        while (right >= 0 && sortNums[right] == nums[right]) {
-//            right--;
-//        }
-//
-//        return right - left + 1;
-//    }
+    public int findUnsortedSubarray(int[] nums) {
+        // [2, 6, 4, 8, 10, 9, 15]
+        // [2, 4, 6, 8, 9, 10, 15]
+        int n = nums.length;
+        int[] sortNums = Arrays.copyOf(nums, n);
+        Arrays.sort(sortNums);
+        int left = 0, right = n - 1;
+        while (left < n && sortNums[left] == nums[left]) {
+            left++;
+        }
+
+        while (right >= 0 && sortNums[right] == nums[right]) {
+            right--;
+        }
+
+        return Math.max(right - left + 1, 0);
+    }
 
 }
