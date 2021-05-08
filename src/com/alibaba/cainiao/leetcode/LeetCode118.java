@@ -11,15 +11,15 @@ public class LeetCode118 {
     // https://www.youtube.com/watch?v=QpLdVwe1hvs
     public List<List<Integer>> generate(int n) {
         List<List<Integer>> res = new ArrayList<>(n);
-        List<Integer> line = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            line.add(0, 1);
-            for (int j = 1; j < line.size() - 1; j++) {
-                line.set(j, line.get(j) + line.get(j + 1));
-            }
-            res.add(new ArrayList<>(line));
-        }
+        List<Integer> last = new ArrayList<>();
 
+        for (int i = 0; i < n; i++) {
+            last.add(0, 1);
+            for (int j = 1; j < last.size() - 1; j++) {
+                last.set(j, last.get(j) + last.get(j + 1));
+            }
+            res.add(new ArrayList<>(last));
+        }
         return res;
     }
 

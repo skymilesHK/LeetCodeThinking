@@ -40,19 +40,21 @@ package com.alibaba.cainiao.leetcode;
 public class LeetCode922 {
 
     public int[] sortArrayByParityII(int[] A) {
-        int even = 0;
-        int odd = 1;
-        int[] B = new int[A.length];
+        int evenIdx = 0;
+        int oddIdx = 1;
+        int[] res = new int[A.length];
         for (int i = 0; i < A.length; i++) {
-            if (A[i] % 2 == 0) {
-                B[even] = A[i];
-                even += 2;
+            if ((A[i] & 1) == 0) {
+                // 偶数
+                res[evenIdx] = A[i];
+                evenIdx += 2;
             } else {
-                B[odd] = A[i];
-                odd += 2;
+                res[oddIdx] = A[i];
+                oddIdx += 2;
             }
         }
-        return B;
+
+        return res;
     }
 
 }
