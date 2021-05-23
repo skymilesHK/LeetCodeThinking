@@ -21,7 +21,7 @@ import java.util.Map;
  * words[i]的长度在[1, 50]。
  */
 public class LeetCode792 {
-    // S = "abcde"
+    // t = "abcde"
     // words = ["a", "bb", "acd", "ace"]
     public int numMatchingSubseq(String t, String[] words) {
         int res = 0;

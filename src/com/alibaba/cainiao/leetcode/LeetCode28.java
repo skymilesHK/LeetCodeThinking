@@ -37,25 +37,25 @@ package com.alibaba.cainiao.leetcode;
  */
 public class LeetCode28 {
 
+    // 输入：t = "hello", s = "ll"
+    // 输出：2
     // https://www.youtube.com/watch?v=OhPtAQtfsuM
-    public int strStr(String haystack, String needle) {
-        if (haystack == null || haystack.length() < needle.length()) {
+    public int strStr(String t, String s) {
+        if (t.length() < s.length()) {
             return -1;
         }
-
-        if (needle == null || needle.length() == 0) {
+        if (s.length() == 0) {
             return 0;
         }
 
-        for (int i = 0; i < haystack.length() - needle.length() + 1; i++) {
-            if (haystack.charAt(i) == needle.charAt(0)) {
-                // j是needle的下标
+        for (int i = 0; i < t.length() - s.length() + 1; i++) {
+            if (t.charAt(i) == s.charAt(0)) {
                 int j = 0;
-                while (i + j < haystack.length() && j < needle.length() && haystack.charAt(i + j) == needle.charAt(j)) {
+                while (i + j < t.length() && j < s.length() && t.charAt(i + j) == s.charAt(j)) {
                     j++;
                 }
 
-                if (j == needle.length()) {
+                if (j == s.length()) {
                     return i;
                 }
             }
@@ -63,5 +63,4 @@ public class LeetCode28 {
 
         return -1;
     }
-
 }

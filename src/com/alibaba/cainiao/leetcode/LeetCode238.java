@@ -22,28 +22,30 @@ import java.util.Arrays;
  * 你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。）
  */
 public class LeetCode238 {
-
     //(前缀积)
     //利用 prefix 数组当做临时存储空间，令 prefix[i] 为从 nums[0] * nums[1] * ... * num[i - 1]。
     //然后从数组末尾，用变量 endProduct 记录末尾若干数字的乘积，每次更新 prefix[i] 即可得到答案。
+    //output: [1,1,2,6]
     //Input:  [1,2,3,4]
     //Output: [24,12,8,6]
+    //https://www.acwing.com/video/1622/
     public int[] productExceptSelf(int[] nums) {
         int n = nums.length;
+        // 前缀积
         int[] prefix = new int[n];
-        Arrays.fill(prefix, 1);
-        for (int i = 0; i < n; i++) {
-            //  不能是prefix[i - 1] * nums[i]，因为是前缀积，不是到当前数的积
+        prefix[0] = nums[0];
+        for (int i = 1; i < n; i++) {
+            prefix[i] = 1;
+            //不能是prefix[i - 1] * nums[i]，因为是前缀积，不是到当前数的积
             prefix[i] = prefix[i - 1] * nums[i - 1];
         }
 
-        int endProduct = 1;
+        int endproduxt = 1;
         for (int i = n - 1; i >= 0; i--) {
-            prefix[i] *= endProduct;
-            endProduct *= nums[i];
+            prefix[i] *= endproduxt;
+            endproduxt *= nums[i];
         }
 
         return prefix;
     }
-
 }

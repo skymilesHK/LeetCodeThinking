@@ -44,55 +44,58 @@ import java.util.*;
  */
 public class LeetCode969 {
 
-    // https://www.youtube.com/watch?v=J3ftj2Hxvv0
-    // https://leetcode-cn.com/problems/pancake-sorting/solution/jian-dan-de-si-lu-jian-bing-pai-xu-by-_y-ygfc/
+    // https://www.youtube.com/watch?v=J3ftj2Hxvv0 (讲解)
+    // https://leetcode-cn.com/problems/pancake-sorting/solution/leetcode969jian-bing-pai-xu-by-ma-xiao-yang-2/  (代码)
     public List<Integer> pancakeSort(int[] A) {
+        // {3, 2, 4, 1}
         int n = A.length;
         List<Integer> res = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            //需要找到前i个元素里面的最大值
-            int maxIndex = searchMax(A, i);
-            if (maxIndex != i) {
-                if (maxIndex == 0) {
+        for (int i = n - 1; i >= 0; i--) {      //从A.length-1开始，每次循环，都会将前i个数的最大值倒转到第i位。
+            int maxIndex = maxIndex(A, i);      //获得前i个数中的最大值的下标
+            if (maxIndex != i) {                //如果前i个数的最大值，并不在第i位，说明需要倒转顺序来进行调整
+                if (maxIndex == 0) {            //但如果最大值下标已经是第一了，直接倒转
                     res.add(i + 1);
                     reverse(A, i);
-                } else {
-                    res.add(maxIndex + 1);
-                    res.add(i + 1);
-                    reverse(A, maxIndex);
-                    reverse(A, i);
+                    continue;
                 }
+
+                res.add(maxIndex + 1);      //注意i、maxIndex代表一组需要旋转
+                res.add(i + 1);
+
+                reverse(A, maxIndex);    //倒转数组(把最大值倒转到第一位)
+                reverse(A, i);           //倒转前i个(最终最大值倒转到最后一位)
+
             }
         }
+
         return res;
     }
 
-    private void reverse(int[] arr, int i) {
-        //将前i个元素进行翻转
-        int L = 0;
-        int R = i;
-        while (L < R) {
-            int tmp = arr[L];
-            arr[L] = arr[R];
-            arr[R] = tmp;
-            L++;
-            R--;
-        }
-    }
-
-
-    //找到前i个元素的最大值
-    private int searchMax(int[] A, int pos) {
-        int max = A[0];
-        int maxIdx = 0;
-        while (pos > 0) {
-            if (max < A[pos]) {
-                max = A[pos];
-                maxIdx = pos;
+    //寻找到最大值的下标
+    private int maxIndex(int[] A, int end) {
+        int max = Integer.MIN_VALUE;
+        int index = end;
+        for (int i = 0; i <= end; i++) {
+            if (A[i] > max) {
+                max = A[i];
+                index = i;
             }
-            pos--;
         }
-        return maxIdx;
+        return index;
     }
 
+    //反转数组
+    public void reverse(int[] A, int index) {// n代表下标
+        // for (int i = 0; i <= index / 2; i++) {
+        //     int tmp = A[i];
+        //     A[i] = A[index - i];
+        //     A[index - i] = tmp;
+        // }
+
+        for (int i = 0, j = index; i < j; i++, j--) {
+            A[i] ^= A[j];
+            A[j] ^= A[i];
+            A[i] ^= A[j];
+        }
+    }
 }

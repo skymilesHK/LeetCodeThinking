@@ -29,30 +29,26 @@ package com.alibaba.cainiao.leetcode;
  * strs[i] consists of only lower-case English letters.
  */
 public class LeetCode14 {
-
+    // https://www.acwing.com/video/1331/
     public String longestCommonPrefix(String[] strs) {
-        if (strs == null || strs.length == 0) {
+        if (strs.length == 0) {
             return "";
         }
+        StringBuilder sb = new StringBuilder(strs[0].length());
+        for (int i = 0; ; i++) {
+            if (i >= strs[0].length()) {
+                return sb.toString();
+            }
 
-        StringBuilder sb = new StringBuilder();
-        String standard = strs[0];
-        for (int i = 0; i < standard.length(); i++) {
-            char ch = standard.charAt(i);
-            for (String str : strs) {
-                if (str.equals(standard)) {
-                    continue;
-                }
-
-                // 可以停下来了
-                if (i >= str.length() || ch != str.charAt(i)) {
+            char ch = strs[0].charAt(i);
+            for (int j = 1; j < strs.length; j++) {
+                if (i >= strs[j].length() || strs[j].charAt(i) != ch) {
                     return sb.toString();
                 }
             }
+
             sb.append(ch);
         }
 
-        return sb.toString();
     }
-
 }

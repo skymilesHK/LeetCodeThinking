@@ -4,33 +4,26 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Solution {
-    // https://www.acwing.com/video/1492/
-    public int longestConsecutive(int[] nums) {
-        int n = nums.length;
-        if (n <= 1) {
-            return n;
+    // t = "abcde"
+    // s = "acd"
+    public boolean isSubsequence(String t, String s) {
+        if (t.length() < s.length()) {
+            return false;
+        }
+        if (s.length() == 0) {
+            return t.length() == 0;
         }
 
-        Set<Integer> set = new HashSet<>(n);
-        for (int x : nums) {
-            set.add(x);
-        }
-
-        int res = 1;
-        for (int x : nums) {
-            if (!set.contains(x - 1)) {
-                // 一定要删除,防止重复枚举
-                set.remove(x);
-                int y = x;
-                while (set.contains(y + 1)) {
-                    y++;
-                    // 一定要删除,防止重复枚举
-                    set.remove(y);
-                }
-                res = Math.max(res, y - x + 1);
+        // i 表示 s的下标，j表示t的下标
+        for (int i = 0, j = 0; i < s.length(); i++, j++) {
+            char sCh = s.charAt(i);
+            j = t.indexOf(sCh, j);
+            if (j < 0) {
+                return false;
             }
         }
-        return res;
+
+        return true;
     }
 }
 
