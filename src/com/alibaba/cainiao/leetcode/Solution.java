@@ -2,29 +2,12 @@ package com.alibaba.cainiao.leetcode;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Solution {
-    // t = "abcde"
-    // s = "acd"
-    public boolean isSubsequence(String t, String s) {
-        if (t.length() < s.length()) {
-            return false;
-        }
-        if (s.length() == 0) {
-            return t.length() == 0;
-        }
 
-        // i 表示 s的下标，j表示t的下标
-        for (int i = 0, j = 0; i < s.length(); i++, j++) {
-            char sCh = s.charAt(i);
-            j = t.indexOf(sCh, j);
-            if (j < 0) {
-                return false;
-            }
-        }
 
-        return true;
-    }
+
 }
 
 class Trie {

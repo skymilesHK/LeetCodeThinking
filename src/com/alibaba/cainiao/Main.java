@@ -17,7 +17,6 @@ public class Main {
     public static void main(String[] args) {
         Solution solution = new Solution();
         int[] a = {9,8,1,0,1,9,4,0,4,1};
-        solution.isValid("(){}}{");
     }
 
 }

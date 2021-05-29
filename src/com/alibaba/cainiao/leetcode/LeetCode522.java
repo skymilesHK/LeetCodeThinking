@@ -1,5 +1,7 @@
 package com.alibaba.cainiao.leetcode;
 
+import java.util.Map;
+
 /**
  * 522. 最长特殊序列 II
  * 给定字符串列表，你需要从它们中找出最长的特殊序列。最长特殊序列定义如下：该序列为某字符串独有的最长子序列（即不能是其他字符串的子序列）。
@@ -22,70 +24,39 @@ package com.alibaba.cainiao.leetcode;
  * 给定字符串列表的长度将在 [2, 50 ] 之间。
  */
 public class LeetCode522 {
-    // https://www.acwing.com/solution/content/4849/
-    public int nextGreaterElement(int n) {
-        if (n <= 0) {
-            return 0;
-        }
 
-        StringBuilder sb = new StringBuilder();
-        while (n > 0) {
-            sb.insert(0, n % 10);
-            n /= 10;
-        }
-
-        int[] nums = new int[sb.length()];
-        for (int i = 0; i < sb.length(); i++) {
-            nums[i] = sb.charAt(i) - '0';
-        }
-
-        int len = nums.length;
-        int replaceIdx = len - 2;
-        while (replaceIdx >= 0) {
-            if (nums[replaceIdx] < nums[replaceIdx + 1]) {
-                break;
+    // https://www.acwing.com/video/1946/
+    public int findLUSlength(String[] strs) {
+        int res = 0;
+        for (int i = 0; i < strs.length; i++) {
+            boolean isSub = false;
+            for (int j = 0; j < strs.length; j++) {
+                if (i != j && isSequence(strs[i], strs[j])) {
+                    isSub = true;
+                    break;
+                }
             }
 
-            replaceIdx--;
+            // 如果还是isSub==false
+            if (!isSub) {
+                res = Math.max(res, strs[i].length());
+            }
+
         }
 
-        if (replaceIdx < 0) {
-            return -1;
-        }
-
-        // replace curr number with the next lowest greater number
-        int lgIdx = replaceIdx + 1;
-        while (lgIdx < len && nums[lgIdx] > nums[replaceIdx]) {
-            lgIdx++;
-        }
-
-        swap(nums, replaceIdx, lgIdx - 1);
-        reverse(nums, replaceIdx + 1, len - 1);
-
-        long t = 0;
-        for (int x : nums) {
-            t = t * 10 + x;
-        }
-
-        if (t > Integer.MAX_VALUE) {
-            return -1;
-        }
-        return (int) t;
+        return res;
     }
 
-    private void reverse(int[] nums, int i, int j) {
-        while (i < j) {
-            swap(nums, i, j);
-            i++;
-            j--;
+    private boolean isSequence(String s, String t) {
+        int sLen = s.length(), tLen = t.length();
+        int i = 0, j = 0;
+        while (i < sLen && j < tLen) {
+            if (s.charAt(i) == t.charAt(j)) {
+                i++;
+            }
+            j++;
         }
-    }
 
-    private void swap(int[] nums, int i, int j) {
-        if (i != j) {
-            int t = nums[i];
-            nums[i] = nums[j];
-            nums[j] = t;
-        }
+        return i == sLen;
     }
 }

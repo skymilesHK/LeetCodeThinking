@@ -1,9 +1,6 @@
 package com.alibaba.cainiao.leetcode;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 539. Minimum Time Difference
@@ -19,36 +16,27 @@ import java.util.Set;
  */
 public class LeetCode539 {
 
+    // https://www.acwing.com/video/1997/
     // 转换成分钟
     // 用Set剔除duplicate（直接return 0）
     // 排序
     // 比较最小值和最大值的absolute difference(注意跨天), 再把 i 和 i - 1 互相比较， return 最小值
-    public int findMinDifference(List<String> timePoints) {
-        int n = timePoints.size();
-        int[] minutes = new int[n];
-        Set<Integer> set = new HashSet<>(n);
-        for (int i = 0, k = 0; i < n; i++) {
-            int minute = getMinutes(timePoints.get(i));
-            minutes[k++] = minute;
-            if (!set.add(minute)) {
-                return 0;
-            }
+    public int findMinDifference(List<String> tList) {
+        int n = tList.size(), res = 0x3f3f3f3f;
+        List<Integer> minList = new ArrayList<>(n);
+
+        for (String x : tList) {
+            String[] split = x.split(":");
+            minList.add(60 * Integer.parseInt(split[0]) + Integer.parseInt(split[1]));
         }
 
-        Arrays.sort(minutes);
+        Collections.sort(minList);
 
-        int min = minutes[0], max = minutes[n - 1];
-        // 注意跨天
-        int minDiff = Math.min(max - min, 60 * 24 + min - max);
+        // 注意跨天，注意并不是每个用例不都是zero时间base的
         for (int i = 1; i < n; i++) {
-            minDiff = Math.min(minDiff, minutes[i] - minutes[i - 1]);
+            res = Math.min(res, minList.get(i) - minList.get(i - 1));
         }
-
-        return minDiff;
+        res = Math.min(res, 24 * 60 - minList.get(minList.size() - 1) + minList.get(0));
+        return res;
     }
-
-    private int getMinutes(String s) {
-        return Integer.parseInt(s.substring(0, 2)) * 60 + Integer.parseInt(s.substring(3, 5));
-    }
-
 }
