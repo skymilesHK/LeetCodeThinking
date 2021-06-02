@@ -48,16 +48,18 @@ import java.util.TreeMap;
  */
 public class LeetCode897 {
 
-    private TreeNode newRoot = null;
-    private TreeNode curNode = null;
+    private TreeNode pre = null;
+    private TreeNode dummy = null;
 
     public TreeNode increasingBST(TreeNode root) {
         if (root == null) {
             return null;
         }
 
+        dummy = new TreeNode(-1);
+        pre = dummy;
         inOrder(root);
-        return newRoot;
+        return dummy.right;
     }
 
     private void inOrder(TreeNode root) {
@@ -66,14 +68,10 @@ public class LeetCode897 {
         }
 
         inOrder(root.left);
-        if (newRoot == null) {
-            newRoot = new TreeNode(root.val);
-            curNode = newRoot;
-        } else {
-            curNode.right = new TreeNode(root.val);
-            curNode = curNode.right;
-        }
+        pre.right = root;
+        pre = root;
+        // 左子树清空
+        root.left = null;
         inOrder(root.right);
     }
-
 }

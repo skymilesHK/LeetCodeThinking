@@ -32,31 +32,24 @@ package com.alibaba.cainiao.leetcode;
 public class LeetCode617 {
 
     public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
-        if (t1 == null && t2 == null) {
+        if (t1 == null || t2 != null) {
+            TreeNode t = t1;
+            t1 = t2;
+            t2 = t;
+        }
+        if (t1 == null) {
             return null;
         }
 
-        // only left
-        if (t2 == null) {
-            TreeNode root = new TreeNode(t1.val);
-            root.left = mergeTrees(t1.left, null);
-            root.right = mergeTrees(t1.right, null);
-            return root;
+        // 值合并到t1
+        // 到这里说明t1必然存在
+        if (t2 != null) {
+            t1.val += t2.val;
         }
 
-        // only right
-        if (t1 == null) {
-            TreeNode root = new TreeNode(t2.val);
-            root.left = mergeTrees(null, t2.left);
-            root.right = mergeTrees(null, t2.right);
-            return root;
-        }
+        t1.left = mergeTrees(t1.left, t2 != null ? t2.left : null);
+        t1.right = mergeTrees(t1.right, t2 != null ? t2.right : null);
 
-        // two children
-        TreeNode root = new TreeNode(t1.val + t2.val);
-        root.left = mergeTrees(t1.left, t2.left);
-        root.right = mergeTrees(t1.right, t2.right);
-        return root;
+        return t1;
     }
-
 }

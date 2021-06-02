@@ -19,29 +19,28 @@ package com.alibaba.cainiao.leetcode;
  */
 public class LeetCode543 {
 
-    // https://www.bilibili.com/video/BV19t411w7Ep
-    int res = -1;
-
-    public int diameterOfBinaryTree(TreeNode root) {
-        if (root == null) {
-            return 0;
+    public TreeNode pruneTree(TreeNode root) {
+        if (!dfs(root)) {
+            return null;
+        } else {
+            return root;
         }
-
-        int singleLen = dfs(root);
-        return res;
     }
 
-    // dfs函数表示经过当前节点到(左或者右,只能是一个)的单边叶子节点的最大路径长度
-    private int dfs(TreeNode root) {
+    private boolean dfs(TreeNode root) {
         if (root == null) {
-            return 0;
+            return false;
         }
 
-        // 向左右拿path长度
-        int left = dfs(root.left);
-        int right = dfs(root.right);
-        res = Math.max(res, left + right);
-        return Math.max(left, right) + 1;
+        if (!dfs(root.left)) {
+            root.left = null;
+        }
+
+        if (!dfs(root.right)) {
+            root.right = null;
+        }
+
+        return root.val == 1 || root.left != null || root.right != null;
     }
 
 }

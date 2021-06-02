@@ -29,33 +29,35 @@ import java.util.Map;
 public class LeetCode889 {
 
     // 记录结点值在后序中的下标
-    Map<Integer, Integer> map = new HashMap<>();
+    Map<Integer, Integer> postMap = new HashMap<>();
 
     public TreeNode constructFromPrePost(int[] pre, int[] post) {
         for (int i = 0; i < post.length; i++) {
-            map.put(post[i], i);
+            postMap.put(post[i], i);
         }
 
         return build(pre, 0, pre.length - 1, post, 0, post.length - 1);
     }
 
     private TreeNode build(int[] pre, int preStart, int preEnd, int[] post, int postStart, int postEnd) {
-        if (preStart > preEnd) {
+        if (preStart > preEnd || postStart > postEnd) {
             // 没有结点，返回空
             return null;
+        }
+        if (postStart == postEnd) {
+            return new TreeNode(pre[preStart]);
         }
 
         // 前序第一个结点就是当前根结点
         TreeNode root = new TreeNode(pre[preStart]);
-        if (preStart < preEnd) {
-            int leftV = pre[preStart + 1]; //默认一定有左子树，左子树根结点下标即begin + 1
-            int leftCnt = map.get(leftV) - postStart + 1; //计算左子树结点数,在post里面找分界点
 
-            //递归构建子树
-            root.left = build(pre, preStart + 1, preStart + leftCnt, post, postStart, postEnd);
-            root.right = build(pre, preStart + leftCnt + 1, preEnd, post, postStart + leftCnt, postEnd);
+        // 默认一定有左子树，左子树根结点下标即begin + 1
+        int leftV = pre[preStart + 1];
+        // 计算左子树结点数,在post里面找分界点
+        int leftLen = postMap.get(leftV) - postStart + 1;
 
-        }
+        root.left = build(pre, preStart + 1, preStart + leftLen, post, postStart, postMap.get(leftV));
+        root.right = build(pre, preStart + 1 + leftLen, preEnd, post, postStart + leftLen, postEnd - 1);
         return root;
     }
 
