@@ -19,7 +19,7 @@ package com.alibaba.cainiao.leetcode;
  * Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
  */
 public class LeetCode152 {
-
+    // 九章第一个视频
     public int maxProduct(int[] nums) {
         int n = nums.length;
         if (n == 1) {

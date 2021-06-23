@@ -27,23 +27,20 @@ public class LeetCode82 {
 
         var dummy = new ListNode(-1);
         dummy.next = head;
-
         var pre = dummy;
-        var cur = head;
-
-        while (cur != null) {
-            // curr指针一直判断重复，向后移动
-            while (cur.next != null && cur.next.val == cur.val) {
+        var cur = pre.next;
+        while (pre.next != null) {
+            cur = pre.next;
+            // cur指针一直判断重复，向后移动
+            while (cur.next != null && cur.val == cur.next.val) {
                 cur = cur.next;
             }
 
             if (pre.next == cur) {
-                pre = pre.next;
+                pre = cur;
             } else {
                 pre.next = cur.next;
             }
-
-            cur = cur.next;
         }
 
         return dummy.next;

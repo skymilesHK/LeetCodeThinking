@@ -18,31 +18,31 @@ public class LeetCode86 {
 
     // https://www.acwing.com/video/1430/
     public ListNode partition(ListNode head, int x) {
-        if (head == null) {
-            return null;
+        if (head == null || head.next == null) {
+            return head;
         }
 
-        var ldummy = new ListNode(-1);
-        var rdummy = new ListNode(-1);
-        //设置两个指针，分别是两个链表的尾指针
-        var lt = ldummy;
-        var rt = rdummy;
-        var cur = head;
-        while (cur != null) {
-            if (cur.val < x) {
-                lt.next = cur;
-                lt = lt.next;
+        var lowDummy = new ListNode(0);
+        var highDummy = new ListNode(0);
+        var p = head;
+        var p1 = lowDummy;
+        var p2 = highDummy;
+
+        while (p != null) {
+            if (p.val < x) {
+                p1.next = p;
+                p1 = p1.next;
             } else {
-                rt.next = cur;
-                rt = rt.next;
+                p2.next = p;
+                p2 = p2.next;
             }
-            cur = cur.next;
+            p = p.next;
         }
 
-        //两个链表首尾相连
-        lt.next = ldummy.next;
-        rt.next = null;
-        return ldummy.next;
+        // 高的部分断开
+        p2.next = null;
+        p1.next = highDummy.next;
+        return lowDummy.next;
     }
 
 }

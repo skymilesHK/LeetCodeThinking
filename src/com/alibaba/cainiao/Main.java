@@ -9,14 +9,46 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class Main {
-    static int n, m = 0;
-    static int[][] g;
-    static int[] d;
-    static boolean[] st;
 
     public static void main(String[] args) {
         Solution solution = new Solution();
         int[] a = {9,8,1,0,1,9,4,0,4,1};
+        quickSort(a);
+        System.out.println(a);
     }
 
+    private static void quickSort(int[] A) {
+        quickSort(A, 0, A.length - 1);
+    }
+
+    private static void quickSort(int[] A, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+
+        int pivot = A[l];
+        int i = l - 1, j = r + 1;
+        while (i < j) {
+            do {
+                i++;
+            } while (A[i] < pivot);
+
+            do {
+                j--;
+            } while (A[j] > pivot);
+
+            if (i < j) {
+                swap(A, i, j);
+            }
+        }
+
+        quickSort(A, l, j);
+        quickSort(A, j + 1, r);
+    }
+
+    private static void swap(int[] A, int i, int j) {
+        int t = A[i];
+        A[i] = A[j];
+        A[j] = t;
+    }
 }

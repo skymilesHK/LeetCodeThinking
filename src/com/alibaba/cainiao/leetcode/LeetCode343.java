@@ -26,7 +26,9 @@ public class LeetCode343 {
 
         int res = 0;
         for (int i = 1; i <= n - 1; i++) {
-            res = Math.max(res, Math.max(i * (n - i), i * dfs(n - i)));
+            int levelRes = i * (n - i);
+            res = Math.max(res, Math.max(levelRes, i * dfs(n - i)));
+
         }
         memo.put(n, res);
         return res;

@@ -33,17 +33,17 @@ public class LeetCode382 {
 
     /** Returns a random node's value. */
     public int getRandom() {
-        int c = 0;
+        int candi = 0;
         int n = 0;
-        var cur = h;
-        while (h != null) {
+        for (var cur = h; cur != null; cur = cur.next) {
             n++;
+            // 1/n的概率选一个上位的数字
             if (random.nextInt() % n == 0) {
-                c = h.val;
+                candi = cur.val;
             }
-            h = h.next;
         }
-        return c;
+
+        return candi;
     }
 
 }
