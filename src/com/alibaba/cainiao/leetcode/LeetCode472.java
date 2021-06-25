@@ -1,9 +1,6 @@
 package com.alibaba.cainiao.leetcode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 472. Concatenated Words
@@ -36,47 +33,32 @@ public class LeetCode472 {
 
     public List<String> findAllConcatenatedWordsInADict(String[] words) {
         n = words.length;
-        if (n == 0) {
-            return res;
-        }
-
-        for (int i = 0; i < n; i++) {
-            dict.add(words[i]);
-        }
-
+        Collections.addAll(dict, words);
         for (String word : words) {
             dict.remove(word);
-            boolean b = wordBreak(word);
-            dict.add(word);
-        }
-
-        for (String m : memo) {
-            if (dict.contains(m)) {
-                res.add(m);
+            if (dfs(word)) {
+                res.add(word);
             }
+            dict.remove(word);
         }
 
         return res;
     }
 
-    private boolean wordBreak(String s) {
-        if (dict.contains(s)) {
+    // 类似work break
+    private boolean dfs(String word) {
+        if (memo.contains(word) || dict.contains(word)) {
             return true;
         }
-        if (memo.contains(s)) {
-            return true;
-        }
-
-        for (int i = 1; i < s.length(); i++) {
-            String left = s.substring(0, i);
-            String right = s.substring(i);
-            if (dict.contains(left) && wordBreak(right)) {
-                memo.add(s);
+        for (int i = 1; i < word.length(); i++) {
+            String left = word.substring(0, i);
+            String right = word.substring(i);
+            if (dict.contains(left) && dfs(right)) {
+                memo.add(word);
                 return true;
             }
         }
-
+        memo.remove(word);
         return false;
     }
-
 }
