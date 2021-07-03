@@ -6,30 +6,27 @@ package com.alibaba.cainiao.leetcode;
  */
 public class LeetCode19 {
 
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
+    // 1.fast先移动n位
+    // 2.fast和slow同时移动
+    // 3.删除slow后面这个点，就ok
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        var dummy = new ListNode(-1);
+        dummy.next = head;
+        var slow = dummy;
+        var fast = dummy;
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
         }
 
-        if (l2 == null) {
-            return l1;
+        while (fast != null && fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
         }
 
-        ListNode dummy = new ListNode(-1);
-        ListNode curr = dummy;
+        var next = slow.next;
+        slow.next = next.next;
+        next.next = null;
 
-        ListNode h1 = l1;
-        ListNode h2 = l2;
-        while (h1 != null && h2 != null) {
-            boolean b = h1.val < h2.val;
-            curr.next = b ? h1 : h2;
-            curr = curr.next;
-
-            h1 = b ? h1.next : h1;
-            h2 = b ? h2 : h2.next;
-        }
-
-        curr.next = (h1 != null) ? h1 : h2;
         return dummy.next;
     }
 

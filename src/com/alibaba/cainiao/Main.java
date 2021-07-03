@@ -11,11 +11,37 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
+        int solve = solve("abcabcbb");
+        System.out.println(solve);
+    }
 
-        int[] a = {9,8,1,0,1,9,4,0,4,1};
-        Arrays.stream(a).sum();
-        quickSort(a);
-        System.out.println(a);
+    static public int solve(String s) {
+        if (s == null) {
+            return 0;
+        }
+        int n = s.length();
+        if (n == 0) {
+            return 0;
+        }
+
+        Map<Character/**字符**/, Integer/**个数**/> map = new HashMap<>();
+        int res = 0;
+
+        for (int i = 0, j = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+            // 这段弄啥呢
+            // 这段是，缩短区间,[j,i]这段区间找,滑动窗口,我拷贝到本地跑下
+            while (map.get(ch) >= 2) {
+                // 减小j边界
+                map.put(s.charAt(j), map.get(s.charAt(j)) - 1);
+                j++;
+            }
+
+            res = Math.max(res, i - j + 1);
+        }
+
+        return res;
     }
 
     private static void quickSort(int[] A) {
