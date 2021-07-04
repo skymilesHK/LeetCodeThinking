@@ -1,5 +1,6 @@
 package com.alibaba.cainiao.leetcode;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -62,7 +63,7 @@ public class LeetCode146 {
 
     int capacity = 0;
     int size = 0;
-    Map<Integer, DNode> map = null;
+    Map<Integer, DNode> map = new HashMap<>();
     /**
      * 虚拟头结点没有前驱
      */
