@@ -23,7 +23,7 @@ public class LeetCode147 {
         // Input:  4->2->1->3
         // Output: 1->2->3->4
         // dummy.next = head; 这题还有个地方，dummy先不和head相连，也是个边界
-        var dummy = new ListNode(-1);
+        var dummy = new ListNode(0);
 
         var pre = dummy;
         var cur = head;
