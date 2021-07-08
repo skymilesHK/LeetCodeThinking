@@ -32,9 +32,11 @@ package com.alibaba.cainiao.leetcode;
 public class LeetCode394 {
     // 为啥需要全局变量位置下标？仅当递归子问题的参数也需要反向影响父递归问题的参数的时候
     private int u = 0;
+    private int n = 0;
 
     public String decodeString(String s) {
-        if (s == null || s.length() == 0) {
+        n = s.length();
+        if (n == 0) {
             return "";
         }
 
@@ -44,25 +46,27 @@ public class LeetCode394 {
     }
 
     private void dfs(String s, StringBuilder path) {
-        int k = 0;
-        while (u < s.length()) {
+        int num = 0;
+        while (u < n) {
             char ch = s.charAt(u);
             u++;
             if (Character.isDigit(ch)) {
-                k = k * 10 + (ch - '0');
+                num = num * 10 + (ch - '0');
             } else if (ch == '[') {
-                // 求解子问题,为什么要new？因为子问题的解乏
-                StringBuilder subPath = new StringBuilder();
-                dfs(s, subPath);
-                String sub = subPath.toString();
+                // "["
+                //求解子问题
+                StringBuilder sb = new StringBuilder();
+                dfs(s, sb);
+                String sub = sb.toString();
                 do {
                     path.append(sub);
-                } while (--k > 0);
-            } else if (ch == ']') {
+                } while (--num > 0);
+            } else if (Character.isAlphabetic(ch)) {
+                path.append(ch);
+            } else {
+                // "]"
                 // 跳出循环,返回上一次调用
                 break;
-            } else {
-                path.append(ch);
             }
         }
     }
