@@ -24,16 +24,22 @@ package com.alibaba.cainiao.leetcode;
  * 解释: 有4个子串：“10”，“01”，“10”，“01”，它们具有相同数量的连续1和0。
  */
 public class LeetCode696 {
-    public String toLowerCase(String str) {
-        StringBuilder sb = new StringBuilder(str.length());
-        for (int i = 0; i < str.length(); i++) {
-            char ch = str.charAt(i);
-            if (Character.isUpperCase(ch)) {
-                sb.append(ch + 32);
-            } else {
-                sb.append(ch);
+    // https://www.acwing.com/video/2519/
+    public int countBinarySubstrings(String s) {
+        int n = s.length();
+        int res = 0, lastLen = 0;
+        for (int i = 0, j = i; i < n; i++) {
+            j = i;
+            while (j < n && s.charAt(j) == s.charAt(i)) {
+                j++;
             }
+
+            int curLen = j - i;
+            res += Math.min(curLen, lastLen);
+            lastLen = curLen;
+            i = j - 1;
         }
-        return sb.toString();
+
+        return res;
     }
 }

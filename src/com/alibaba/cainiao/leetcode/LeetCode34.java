@@ -33,49 +33,56 @@ package com.alibaba.cainiao.leetcode;
  * -109 <= target <= 109
  */
 public class LeetCode34 {
+
     public int[] searchRange(int[] nums, int target) {
+        int [] res = new int[] {-1, -1};
         int n = nums.length;
         if (n == 0) {
-            return new int[] {-1, -1};
+            return res;
         }
+
+        int l = -1;
         int start = 0, end = n - 1, mid = 0;
         while (start + 1 < end) {
             mid = start + (end - start) / 2;
-            if (nums[mid] < target) {
-                start = mid;
-            } else if (nums[mid] > target) {
+            if (nums[mid] == target) {
                 end = mid;
+            } else if (nums[mid] < target) {
+                start = mid;
             } else {
                 end = mid;
             }
         }
 
-        int l = -1, r = - 1;
         if (nums[start] == target) {
             l = start;
         } else if (nums[end] == target) {
             l = end;
         }
 
+        int r = -1;
         start = 0;
         end = n - 1;
+        mid = 0;
         while (start + 1 < end) {
             mid = start + (end - start) / 2;
-            if (nums[mid] < target) {
+            if (nums[mid] == target) {
                 start = mid;
-            } else if (nums[mid] > target) {
-                end = mid;
+            } else if (nums[mid] < target) {
+                start = mid;
             } else {
-                start = mid;
+                end = mid;
             }
         }
-        // 找最后一个, 注意一定要先判断end，再判断start
+
         if (nums[end] == target) {
             r = end;
         } else if (nums[start] == target) {
             r = start;
         }
 
-        return new int[] {l, r};
+        res[0] = l;
+        res[1] = r;
+        return res;
     }
 }

@@ -11,8 +11,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        LeetCode856 leetCode = new LeetCode856();
-        System.out.println(leetCode.scoreOfParentheses("(())"));
+        System.out.println(Math.ceil(2.21));
     }
 
     static public int solve(String s) {

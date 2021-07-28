@@ -1,9 +1,6 @@
 package com.alibaba.cainiao.leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 763. 划分字母区间
@@ -28,22 +25,28 @@ import java.util.Map;
  */
 public class LeetCode763 {
 
-    // https://leetcode-cn.com/problems/partition-labels/solution/java-jian-dan-yi-dong-de-tan-xin-by-leetcoder-youz/
-    public List<Integer> partitionLabels(String S) {
-        List<Integer> res = new ArrayList<>(128);
-        Map<Character, Integer> map = new HashMap<>(128);
-        for (int i = 0; i < S.length(); i++) {
-            map.put(S.charAt(i), i);
-        }
-
-        int start = 0, end = 0;
-        for (int i = 0; i < S.length(); i++) {
-            end = Math.max(end, map.getOrDefault(S.charAt(i), 0));
-            if (end == i) {
-                res.add(end - start + 1);
-                start = end + 1;
+    public int[] shortestToChar(String s, char c) {
+        int n = s.length();
+        int[] res = new int[n];
+        Arrays.fill(res, 0x3f3f3f3f);
+        for (int i = 0, j = -1; i < n; i++) {
+            if (s.charAt(i) == c) {
+                j = i;
+            }
+            if (j != -1) {
+                res[i] = i - j;
             }
         }
+
+        for (int i = n - 1, j = n; i >= 0; i--) {
+            if (s.charAt(i) == c) {
+                j = i;
+            }
+            if (j != n) {
+                res[i] = Math.min(res[i], j - i);
+            }
+        }
+
         return res;
     }
 
