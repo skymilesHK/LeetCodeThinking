@@ -39,42 +39,29 @@ package com.alibaba.cainiao.leetcode;
  */
 public class LeetCode122 {
 
-    // 九章动态规划-序列型
+    // https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/solution/tan-xin-suan-fa-by-liweiwei1419-2/
 
     public int maxProfit(int[] prices) {
         int n = prices.length;
         if (n < 2) {
             return 0;
         }
+        int idx = 0, res = 0;
+        int valley = prices[0];
+        int peak = prices[0];
 
-        // dp[i][j]表示前i天结束后，在阶段j的最大获利
-        int[][] dp = new int[n + 1][5 + 1];
-        dp[0][0] = 0;
-        dp[0][1] = 0;
-        for (int j = 2; j <= 5; j++) {
-            dp[0][j] = Integer.MIN_VALUE;
+        while (idx < n - 1) {
+            while (idx < n - 1 && prices[idx] >= prices[idx + 1]) {
+                idx++;
+            }
+            valley = prices[idx];
+            while (idx < n - 1 && prices[idx] < prices[idx + 1]) {
+                idx++;
+            }
+            peak = prices[idx];
+            res += peak - valley;
         }
 
-        for (int i = 1; i <= n; i++) {
-            // 阶段1，3，5 是手中无股票
-            for (int j = 1; j <= 5; j += 2) {
-                // 前一天就处于这阶段
-                dp[i][j] = dp[i - 1][j];
-                if (i >= 2 && j >= 1 && dp[i - 1][j - 1] != Integer.MIN_VALUE) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - 1] + prices[i - 1] - prices[i - 2]);
-                }
-            }
-
-            // 阶段2，4
-            for (int j = 2; j <= 5; j += 2) {
-                // 前一天就处于前一个阶段，没有收益
-                dp[i][j] = dp[i - 1][j - 1];
-                if (i >= 2 && dp[i - 1][j] != Integer.MIN_VALUE) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j] + prices[i - 1] - prices[i - 2]);
-                }
-            }
-        }
-
-        return Math.max(Math.max(dp[n][1], dp[n][3]), dp[n][5]);
+        return res;
     }
 }
