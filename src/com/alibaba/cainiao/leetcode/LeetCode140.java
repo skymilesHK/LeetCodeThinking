@@ -40,28 +40,30 @@ import java.util.Set;
  * 来源：AcWing
  * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
  */
-// https://www.youtube.com/watch?v=JqOIRBC0_9c
 
+// https://www.youtube.com/watch?v=JqOIRBC0_9c
 public class LeetCode140 {
+
     // 用于存储结果的List
-    private List<String> res = new ArrayList<>();
-    private Set<String> dic = new HashSet<>();
+    List<String> res;
+    Set<String> dict;
 
     public List<String> wordBreak(String s, List<String> wordDict) {
-        dic.addAll(wordDict);
-        dfs(s,  new ArrayList<>());
+        res = new ArrayList<>(s.length());
+        dict = new HashSet<>(wordDict);
+        dfs(s, new ArrayList<String>());
         return res;
     }
 
-    private void dfs(String s, List<String> path) {
-        if (0 >= s.length()) {
+    private void dfs(String s, ArrayList<String> path) {
+        if (s.length() <= 0) {
             res.add(String.join(" ", path));
             return;
         }
 
         for (int i = 1; i <= s.length(); i++) {
             String left = s.substring(0, i);
-            if (!dic.contains(left)) {
+            if (!dict.contains(left)) {
                 continue;
             }
             path.add(left);
@@ -70,4 +72,5 @@ public class LeetCode140 {
             path.remove(path.size() - 1);
         }
     }
+
 }

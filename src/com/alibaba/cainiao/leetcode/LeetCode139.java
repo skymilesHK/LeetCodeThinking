@@ -28,10 +28,12 @@ import java.util.List;
  * 输出: false
  */
 public class LeetCode139 {
+    // https://leetcode-cn.com/problems/word-break/solution/dong-tai-gui-hua-python-dai-ma-by-liweiwei1419-2/
     public boolean wordBreak(String s, List<String> wordDict) {
         HashSet<String> set = new HashSet<>(wordDict);
 
         int n = s.length();
+        // dp[i] 表示以 s[i] 结尾的子字符串是否进行单词拆分
         boolean[] dp = new boolean[n + 1];
         dp[0] = true;
         for (int i = 1; i <= n; i++) {
