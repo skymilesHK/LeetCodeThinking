@@ -6,30 +6,28 @@ package com.alibaba.cainiao.leetcode;
  * https://leetcode-cn.com/problems/merge-two-sorted-lists/
  */
 public class LeetCode21 {
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        if (l1 == null) {
-            return l2;
+    // pre初始化指向dummy,a指向dummy.next, b指向dummy.next.next
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
         }
 
-        if (l2 == null) {
-            return l1;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode pre = dummy;
+        ListNode a = pre.next;
+        ListNode b = pre.next.next;
+        while (pre != null && pre.next != null && pre.next.next != null) {
+            a = pre.next;
+            b = pre.next.next;
+
+            pre.next = b;
+            a.next = b.next;
+            b.next = a;
+            pre = a;
         }
 
-        var dummy = new ListNode(-1);
-        var p1 = l1;
-        var p2 = l2;
-        var p3 = dummy;
-
-        while (p1 != null && p2 != null) {
-            boolean b = p1.val < p2.val;
-            p3.next = b ? p1 : p2;
-            p3 = p3.next;
-
-            p1 = b ? p1.next : p1;
-            p2 = b ? p2 : p2.next;
-        }
-
-        p3.next = (p1 != null) ? p1 : p2;
         return dummy.next;
     }
 }

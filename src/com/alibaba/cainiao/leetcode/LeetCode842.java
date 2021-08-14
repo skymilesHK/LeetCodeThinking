@@ -1,6 +1,7 @@
 package com.alibaba.cainiao.leetcode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,44 +52,46 @@ import java.util.List;
  * 字符串 S 中只含有数字。
  */
 public class LeetCode842 {
-    public List<Integer> splitIntoFibonacci(String S) {
-        List<Integer> res = new ArrayList<>(S.length());
-        dfs(S, 0, res);
-        return res;
+    // https://www.acwing.com/video/2924/
+    public List<Integer> splitIntoFibonacci(String s) {
+        // 第二个串的起始位置
+        for (int i = 1; i <= 10 && i < s.length(); i++) {
+            // 第二个串的中间位置
+            for (int j = i + 1;j <= 10 && j < s.length(); j++) {
+                long first = Long.parseLong(s.substring(0, i));
+                long second = Long.parseLong(s.substring(i, j));
+                List<Integer> res = get(s, first, second);
+                // 有结果组合直接结束
+                if (!res.isEmpty()) {
+                    return res;
+                }
+            }
+        }
+
+        return Collections.emptyList();
     }
 
-    private boolean dfs(String s, int start, List<Integer> path) {
-        if (start == s.length()) {
-            if (path.size() < 3) {
-                return false;
-            } else {
-                return true;
+    private List<Integer> get(String s, long a, long b) {
+        List<Integer> res = new ArrayList<Integer>(s.length() / 3);
+        res.add((int) a);
+        res.add((int) b);
+        StringBuilder sb = new StringBuilder(String.valueOf(a)).append(b);
+        while (sb.length() < s.length()) {
+            long c = a + b;
+            if (c > Integer.MAX_VALUE) {
+                return Collections.emptyList();
             }
+
+            res.add((int) (c));
+            sb.append(c);
+            a = b;
+            b = c;
         }
 
-        long t = 0L;
-        for (int i = start; i < s.length(); i++) {
-            if (i > start && s.charAt(0) == '0' && s.length() > 3) {
-                break;
-            }
-
-            t = t * 10 + (s.charAt(i) - '0');
-            if (t > Integer.MAX_VALUE) {
-                break;
-            }
-
-            if (path.size() >= 2 && path.get(path.size() - 1) + path.get(path.size() - 2) < t) {
-                break;
-            }
-            if (path.size() < 2 || path.get(path.size() - 1) + path.get(path.size() - 2) == t) {
-                path.add((int) t);
-                if (dfs(s, i + 1, path)) {
-                    return true;
-                }
-                path.remove(path.size() - 1);
-            }
+        //长度一样，但是数值不一样
+        if (!sb.toString().equals(s)) {
+            return Collections.emptyList();
         }
-
-        return false;
+        return res;
     }
 }
