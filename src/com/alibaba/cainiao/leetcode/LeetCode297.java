@@ -22,53 +22,48 @@ package com.alibaba.cainiao.leetcode;
  * 说明: 不要使用类的成员 / 全局 / 静态变量来存储状态，你的序列化和反序列化算法应该是无状态的。
  */
 public class LeetCode297 {
+    StringBuilder sbs;
+    StringBuilder sbd;
+    int u = 0;
 
     // Encodes a tree to a single string.
-    StringBuilder sb = new StringBuilder();
     public String serialize(TreeNode root) {
-        // 若二叉树前序遍历结果中包含左右空子树，则可以从前序遍历结果中还原二叉树
-        dfs1(root);
-        return sb.toString();
+        sbs = new StringBuilder();
+        dfsS(root);
+        return sbs.toString();
     }
 
-    private void dfs1(TreeNode node) {
-        if (node == null) {
-            sb.append("#,");
+    private void dfsS(TreeNode root) {
+        if (root == null) {
+            sbs.append("#,");
         } else {
-            sb.append(node.val).append(",");
-            dfs1(node.left);
-            dfs1(node.right);
+            sbs.append(root.val).append(",");;
+            dfsS(root.left);
+            dfsS(root.right);
         }
     }
 
     // Decodes your encoded data to tree.
-    int idx = 0;
     public TreeNode deserialize(String data) {
-        return dfs2(data);
+        sbd = new StringBuilder(data);
+        return dfsD(sbd);
     }
 
-    private TreeNode dfs2(String data) {
-        if (idx > data.length() - 1) {
+    private TreeNode dfsD(StringBuilder sb) {
+        if (sb.charAt(u) == '#') {
+            u += 2;
             return null;
+        } else {
+            int k = u;
+            while (sb.charAt(k) != ',') {
+                k++;
+            }
+            TreeNode root = new TreeNode(Integer.parseInt(sb.substring(u, k)));
+            //跳过,
+            u = k + 1;
+            root.left = dfsD(sb);
+            root.right = dfsD(sb);
+            return root;
         }
-
-        if (data.charAt(idx) == '#') {
-            idx += 2;   // 跳过#,
-            return null;
-        }
-
-        // 取数
-        int start = idx;
-        while (data.charAt(idx) != ',') {
-            idx++;
-        }
-
-        // 此时idx在,号处
-        int val = Integer.parseInt(data.substring(start, idx));
-        idx++;  // 跳过,
-        TreeNode root = new TreeNode(val);
-        root.left = dfs2(data);
-        root.right = dfs2(data);
-        return root;
     }
 }
