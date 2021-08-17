@@ -41,7 +41,7 @@ public class LeetCode331 {
     public boolean isValidSerialization(String preorder) {
         preorder += ",";
         dfs(preorder);
-        return res && u >= preorder.length();
+        return res;
     }
 
     private void dfs(String preorder) {
@@ -50,18 +50,18 @@ public class LeetCode331 {
             return;
         }
 
+        // 准确的先序遍历，一定是null(#)节点结尾
         if (preorder.charAt(u) == '#') {
             u += 2;
             return;
         }
 
         while (preorder.charAt(u) != ',') {
-            u ++ ;
+            u++;
         }
         // 跳过,
-        u ++ ;
+        u++;
         dfs(preorder);
         dfs(preorder);
     }
-
 }
