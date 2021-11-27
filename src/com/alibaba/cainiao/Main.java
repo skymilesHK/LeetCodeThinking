@@ -10,64 +10,94 @@ import java.util.*;
 
 public class Main {
 
-    // 小Q在进行射击气球的游戏，
-    // 如果小Q在连续T枪中打爆了所有颜色的气球，
-    // 将得到一只QQ公仔作为奖励。（每种颜色的气球至少被打爆一只）。
-    // 这个游戏中有m种不同颜色的气球，编号1到m。小Q一共有n发子弹，然后连续开了n枪。
-    // 小Q想知道在这n枪中，打爆所有颜色的气球最少用了连续几枪？
-    // 输入描述：第一行两个空格间隔的整数数n，m。n<=1000000 m<=2000第二行一共n个空格间隔的整数，分别表示每一枪打中的气球的颜色,0表示没打中任何颜色的气球。
-    //
-    // 输出描述：一个整数表示小Q打爆所有颜色气球用的最少枪数。
-    // 如果小Q无法在这n枪打爆所有颜色的气球，则输出-1
-    // 示例输入：12 5
-    // 2 5 3 1 3 2 4 1 0 5 4 3
-    // 输出：6
-    // test12 52 5 3 1 3 2 4 1 5 0 4 35
+    // 头节点下标
+    static int head;
+    // i下标元素的值
+    static int[] e;
+    // next[i]表示下一个节点的下标
+    static int[] next;
+    // 当前可以用的哪个下标
+    static int idx;
+    static int N = (int) (1E5 + 1);
+    static Scanner in = new Scanner(System.in);
 
-    /**
-     * 使用滑动窗口求解
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        // n是个子弹, m表示有几种不同颜色的气球
-        int n = sc.nextInt(), m = sc.nextInt();
-        int[] colors = new int[n];
-        for (int i = 0; i < n; i++) {
-            colors[i] = sc.nextInt();
-        }
-        int res = minWindow(colors, m);
-        System.out.println(res);
+    // head -> [] -> [] -> [] -> [] -> |
+    //         0     k=1   2     idx
+    //            next[k]=idx             next[idx]=2
+    static void init() {
+        head = -1;
+        idx = 0;
+        e = new int[N];
+        next = new int[N];
     }
 
-    // 利用滑动窗口：
-    // 利用指针i遍历整个数组，如果第一次遍历到某元素，则将在区间中的元素的cnt值加1
-    // 当整个区间包含所有元素时，将begin向前移动，缩小区间长度，更新结果
-    private static int minWindow(int[] nums, int m) {
-        int cnt = m;                    //判断是否包含所有颜色
-        int[] map = new int[m + 1];     //记录颜色出现的次数
-        for (int i = 1; i <= m; i++) {
-            map[i]++;
-        }
-        int begin = 0, end = 0;
-        int width = Integer.MAX_VALUE;
-        while (end < nums.length) {
-            int endNum = nums[end++];
-            if (map[endNum]-- > 0) {
-                cnt--;
-            }
-            while (cnt == 0) {
-                if (end - begin < width) {
-                    width = end - begin;
+    /**
+     * 将x插入头节点
+     * @param x
+     */
+    public static void addToHead(int x) {
+        next[idx] = head;
+        e[idx] = x;
+        head = idx;
+        idx++;
+    }
+
+    /**
+     * 将x这个点 插入到下标是k的点后面
+     * @param k
+     * @param x
+     */
+    public static void add(int k, int x) {
+        e[idx] = x;         // 先把 x 这个值存下来
+        next[idx] = next[k];// 把新点的指针插入k这个点指向的下一个位置
+        next[k] = idx;
+        idx++;
+    }
+
+    /**
+     * 将位置 k 后面的点删除
+     * @param k
+     * @return
+     */
+    public static void remove(int k) {
+        //e[k] = 0; 还原元素值
+        next[k] = next[next[k]];
+    }
+
+    public static void main(String[] args) {
+        init();
+        int M = in.nextInt();
+        for (int i = 0; i < M; i++) {
+            String s = in.next();
+            switch (s) {
+                case "H": {
+                    int x = in.nextInt();
+                    addToHead(x);
+                    break;
                 }
-                int beginNum = nums[begin++];
-                if (map[beginNum]++ == 0) {
-                    cnt++;
+                case "D": {
+                    int k = in.nextInt();
+                    if (k == 0) {
+                        head = next[head];
+                    } else {
+                        remove(k - 1);
+                    }
+                    break;
                 }
+                case "I": {
+                    int k = in.nextInt();
+                    int x = in.nextInt();
+                    add(k - 1, x);
+                    break;
+                }
+                default:
+                    break;
             }
         }
-        return width == Integer.MAX_VALUE ? -1 : width;
+
+        for (int i = head; i != -1; i = next[i]) {
+            System.out.print(e[i] + " ");
+        }
     }
 
 }
