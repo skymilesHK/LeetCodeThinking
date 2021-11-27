@@ -1162,13 +1162,3 @@ LCP35.电动车游城市
 LCP36.最多牌组数
 LCP43.十字路口的交通
 
-Templates  
-Math
-Binary_Index_Tree
-Segment Tree
-Inverse_Element
-Graph
-Bit_Manipulation
-Combination-Number
-RB_Tree
-CPP_LANG
