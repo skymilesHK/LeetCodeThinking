@@ -1,3 +1,5 @@
+This repository contains the leetcode solutions and explanations to the algorithm problems. Only hundreds solutions are included. All are written in Java and implemented by myself. The problems attempted multiple times are labelled with hyperlinks.
+
 (If you are interested in joining this group, ping me wangmianzhi@connect.hku.com)
 
 LeetCode难题代码和算法要点分析
