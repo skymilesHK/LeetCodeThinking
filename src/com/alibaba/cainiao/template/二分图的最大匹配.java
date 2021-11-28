@@ -1,4 +1,4 @@
-package com.alibaba.cainiao.leetcode;
+package com.alibaba.cainiao.template;
 
 import java.util.Arrays;
 import java.util.Scanner;
