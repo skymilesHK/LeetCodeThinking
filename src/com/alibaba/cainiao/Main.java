@@ -1,103 +1,37 @@
 package com.alibaba.cainiao;
 
-import com.alibaba.cainiao.leetcode.*;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.math.BigInteger;
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
 
-    // 头节点下标
-    static int head;
-    // i下标元素的值
-    static int[] e;
-    // next[i]表示下一个节点的下标
-    static int[] next;
-    // 当前可以用的哪个下标
-    static int idx;
-    static int N = (int) (1E5 + 1);
+    static int M = 109;
+    static int N, V = 0;
+    static int[] v = new int[M];
+    static int[] w = new int[M];
+    static int[] s = new int[M];
+    static int[][] dp = new int[M][M];
     static Scanner in = new Scanner(System.in);
 
-    // head -> [] -> [] -> [] -> [] -> |
-    //         0     k=1   2     idx
-    //            next[k]=idx             next[idx]=2
-    static void init() {
-        head = -1;
-        idx = 0;
-        e = new int[N];
-        next = new int[N];
-    }
-
-    /**
-     * 将x插入头节点
-     * @param x
-     */
-    public static void addToHead(int x) {
-        next[idx] = head;
-        e[idx] = x;
-        head = idx;
-        idx++;
-    }
-
-    /**
-     * 将x这个点 插入到下标是k的点后面
-     * @param k
-     * @param x
-     */
-    public static void add(int k, int x) {
-        e[idx] = x;         // 先把 x 这个值存下来
-        next[idx] = next[k];// 把新点的指针插入k这个点指向的下一个位置
-        next[k] = idx;
-        idx++;
-    }
-
-    /**
-     * 将位置 k 后面的点删除
-     * @param k
-     * @return
-     */
-    public static void remove(int k) {
-        //e[k] = 0; 还原元素值
-        next[k] = next[next[k]];
-    }
-
     public static void main(String[] args) {
-        init();
-        int M = in.nextInt();
-        for (int i = 0; i < M; i++) {
-            String s = in.next();
-            switch (s) {
-                case "H": {
-                    int x = in.nextInt();
-                    addToHead(x);
-                    break;
+        // https://www.acwing.com/solution/content/5430/
+        N = in.nextInt();
+        V = in.nextInt();
+
+        for (int i = 1; i <= N; i++) {
+            v[i] = in.nextInt();
+            w[i] = in.nextInt();
+            s[i] = in.nextInt();
+        }
+
+        for (int i = 1; i <= N; i++) {
+            for (int j = 0; j <= V; j++) {
+                for (int k = 0; k <= s[i] && k * v[i] <= j; k++) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - k * v[i]] + w[i] * k);
                 }
-                case "D": {
-                    int k = in.nextInt();
-                    if (k == 0) {
-                        head = next[head];
-                    } else {
-                        remove(k - 1);
-                    }
-                    break;
-                }
-                case "I": {
-                    int k = in.nextInt();
-                    int x = in.nextInt();
-                    add(k - 1, x);
-                    break;
-                }
-                default:
-                    break;
             }
         }
 
-        for (int i = head; i != -1; i = next[i]) {
-            System.out.print(e[i] + " ");
-        }
+        System.out.println(dp[N][V]);
     }
 
 }
