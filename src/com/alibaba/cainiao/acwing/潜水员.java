@@ -1,8 +1,8 @@
-package com.alibaba.cainiao;
+package com.alibaba.cainiao.acwing;
 
 import java.util.Scanner;
 
-public class Main {
+public class 潜水员 {
     // https://www.acwing.com/activity/content/code/content/387902/
     static Scanner in = new Scanner(System.in);
     static int[][][] dp = new int[1001][22][80]; //所有，从前i个气缸里面选，且氧气至少满足j，且氮气至少满足k

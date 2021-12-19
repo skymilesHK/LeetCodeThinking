@@ -1,4 +1,4 @@
-package com.alibaba.cainiao.template;
+package com.alibaba.cainiao.acwing;
 
 import java.util.Scanner;
 

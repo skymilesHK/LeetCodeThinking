@@ -1,4 +1,4 @@
-package com.alibaba.cainiao.template;
+package com.alibaba.cainiao.acwing;
 
 public class 试除法判定质数 {
     public static void main(String[] args) {
