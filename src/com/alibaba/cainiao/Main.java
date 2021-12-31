@@ -1,49 +1,72 @@
 package com.alibaba.cainiao;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    // https://www.acwing.com/activity/content/code/content/387902/
+    // https://www.acwing.com/video/222/    看评论Volantical. 的
+    // https://www.acwing.com/solution/content/5014/
+    static int N, V;
+    static int[] h = new int[101];
+    static int[]e = new int[101];
+    static int[] next = new int[101];
+    static int idx;
+    static int[][] dp = new int[101][101];   // 必选i节点及其子树，总体积在j的条件下的方案数
+    static int[] v = new int[101];
+    static int[] w = new int[101];
     static Scanner in = new Scanner(System.in);
-    static int[][][] dp = new int[1001][22][80]; //所有，从前i个气缸里面选，且氧气至少满足j，且氮气至少满足k
 
     public static void main(String[] args) {
-        int M = in.nextInt();      //氧量
-        int N = in.nextInt();      //氮量
-        int K = in.nextInt();      //气缸数
+        N = in.nextInt();
+        V = in.nextInt();
 
-        // https://www.acwing.com/file_system/file/content/whole/index/content/302744/
-        // 二维情况
-        //1、体积至多j，f[i,k] = 0，0 <= i <= n, 0 <= k <= m（只会求价值的最大值）
-        //2、体积恰好j，
-        //当求价值的最小值：f[0][0] = 0, 其余是INF
-        //当求价值的最大值：f[0][0] = 0, 其余是-INF
-        //3、体积至少j，f[0][0] = 0，其余是INF（只会求价值的最小值）
-        for (int i = 0; i < 1001; i++) {
-            for (int j = 0; j < 22; j++) {
-                for (int k = 0; k < 80; k++) {
-                    dp[i][j][k] = 0x3f3f3f3f;
-                }
-            }
-        }
-        dp[0][0][0] = 0;
-        for (int i = 1; i <= K; i++) {
-            //i气缸的氧量(费用1)
-            int a = in.nextInt();
-            //i气缸的氮量(费用2)
-            int b = in.nextInt();
-            //i气缸的重量(价值/评判标准)
-            int c = in.nextInt();
-            for (int j = 0; j <= M; j++) {
-                for (int k = 0; k <= N; k++) {
-                    // 两个费用受客观条件限制，不能选择当前物品N
-                    dp[i][j][k] = dp[i - 1][j][k];
-                    dp[i][j][k] = Math.min(dp[i][j][k], dp[i - 1][Math.max(0, j - a)][Math.max(0, k - b)] + c);
-                }
+        Arrays.fill(h, -1);
+        int root = 0;
+        for (int i = 1; i <= N; i++) {
+            v[i] = in.nextInt();
+            w[i] = in.nextInt();
+            int p = in.nextInt();
+            if (p == -1) {
+                root = i;
+            } else {
+                add(p, i);
             }
         }
 
-        System.out.println(dp[K][M][N]);
+        dfs(root);
+        System.out.println(dp[root][V]);
     }
 
+    private static void dfs(int u) {
+        // 对当前组(子树)进行遍历,u点必须选
+        for (int i = u; i != -1; i = next[i]) {
+            int son = e[i];
+            dfs(son);
+
+            // 分组背包,循环体积
+            // 必选u点，所以预留体积(这个已经压缩过一维度了)
+            for (int j = V - v[u]; j >= 0; j--) {
+                // 循环决策,因为按照体积种类进行划分，有son+1种, k本身就是体积，；类似v[k]
+                for (int k = 0; k <= j; k++) {
+                    dp[u][j] = Math.max(dp[u][j], dp[u][j - k] + dp[son][k]);
+                }
+            }
+        }
+
+        // 将物品u加进去
+        // 加上刚刚默认选择的父节点u的价值
+        for (int j = V; j >= v[u]; j--) {
+            dp[u][j] = dp[u][j - v[u]] + w[u];
+        }
+        // 因为我们是从叶子结点开始往上做，所以如果背包容积不如当前物品的体积大，那就不能选择当前结点及其子节点，因此赋值为零
+        for (int j = 0; j < v[u]; j++) {
+            dp[u][j] = 0;
+        }
+    }
+
+    private static void add(int a, int b) {
+        e[idx] = b;
+        next[idx] = h[a];
+        h[a] = idx++;
+    }
 }
