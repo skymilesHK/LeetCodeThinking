@@ -1,10 +1,11 @@
-package com.alibaba.cainiao;
+package com.alibaba.cainiao.acwing;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
-
+public class 玉米田 {
+    // https://www.acwing.com/solution/content/17569/
+    // https://www.acwing.com/activity/content/code/content/308038/
     static int N = 13, M = 1 << N;
     static int m, n;
     static int MOD = (int) 1e8;
@@ -89,5 +90,4 @@ public class Main {
 
         return true;
     }
-
 }
