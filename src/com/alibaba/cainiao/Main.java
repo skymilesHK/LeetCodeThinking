@@ -1,80 +1,69 @@
 package com.alibaba.cainiao;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
-    static int N = 11, l, r, K, B;
-    static int[][] c = new int[N][N];
+    static int N = 509;
+    static int n, m;
+    static int[][] g = new int[N][N];       //稠密图一般使用邻接矩阵
+    static int[] dist = new int[N];         //记录每个节点距离起点的距离
+    static boolean[] st = new boolean[N];   //已经确定最短路的集合
     static Scanner in = new Scanner(System.in);
 
-    // https://www.acwing.com/solution/content/3112/
     public static void main(String[] args) {
-        l = in.nextInt();
-        r = in.nextInt();
-        K = in.nextInt();
-        B = in.nextInt();
+        n = in.nextInt();
+        m = in.nextInt();
 
-        init();
-        System.out.println(counter(r) - counter(l - 1));
-    }
-
-    private static int counter(int n) {
-        if (n == 0) {
-            return 0;
-        }
-
-        List<Integer> nums = new ArrayList<>(16);
-        while (n > 0) {
-            nums.add(n % B);
-            n /= B;
-        }
-
-        int res = 0, last = 0;  // 之前那些位已经占用多少个1
-        for (int i = nums.size() - 1; i >= 0; i--) {
-            int x = nums.get(i);
-
-            // 有左边分支，那么至少x>0
-            if (x > 0) {
-                // 第i位放0(允许先导0)
-                res += c[i][K - last];
-                if (x == 1) {
-                    // 放1，那么后面数位上的情况不能用组合数计算，因为要保证答案中的数字比原数字要小
-                    last++;
-                    if (last > K) {
-                        break;
-                    }
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == j) {
+                    g[i][j] = 0;
                 } else {
-                    // 第i位可以放1, 第i位放1,后i-1位放k-last-1个1
-                    if (K - last - 1 >= 0) {
-                        res += c[i][K - last - 1];
-                        // 对应于：左分支中填1,此时右分支的情况（右侧此时>1），不合法！！！直接break。
-                        break;
-                    }
-                }
-            }
-
-            // 右边
-            if (i == 0 && K - last == 0) {
-                res++;
-            }
-        }
-
-        return res;
-    }
-
-    private static void init() {
-        for (int a = 0; a < N; a++) {
-            for (int b = 0; b < a; b++) {
-                if (b == 0) {
-                    c[a][b] = 1;
-                } else {
-                    c[a][b] = c[a - 1][b] + c[a - 1][b - 1];
+                    g[i][j] = 0x3f3f3f3f;
                 }
             }
         }
+
+        do {
+            int a = in.nextInt();
+            int b = in.nextInt();
+            int w = in.nextInt();
+            g[a][b] = Math.min(g[a][b], w);
+        } while (--m > 0);
+
+        System.out.println(dijkstra());
     }
 
+    // 单源最短距离(无负权边)
+    private static int dijkstra() {
+        // 1. d距离数组初始化,d[1]=0,第一个节点是1开始，不是0开始
+        Arrays.fill(dist, 0x3f3f3f3f);
+        dist[1] = 0;
+
+        // 2. 做n次
+        for (int i = 1; i <= n; i++) {
+            int t = -1;
+            // 不在s集合，更短的路径，则进行更新
+            for (int j = 1; j <= n; j++) {
+                if (!st[j] && (t == -1 || dist[j] < dist[t])) {
+                    t = j;
+                }
+            }
+
+            // 加入到s集合中
+            st[t] = true;
+            //找到了距离最小的点t，并用最小的点t去更新其他的点到起点的距离
+            for (int j = 1; j <= n; ++j) {
+                dist[j] = Math.min(dist[j], dist[t] + g[t][j]);
+            }
+        }
+
+        // 如果起点到达不了n号节点，则返回-1
+        if (dist[n] >= 0x3f3f3f3f) {
+            return -1;
+        }
+        // 返回起点距离n号节点的最短距离
+        return dist[n];
+    }
 }
