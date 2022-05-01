@@ -13,9 +13,9 @@ public class 染色法判定二分图 {
     static int[] e = new int[M];
     static int[] next = new int[M];
     static int[] color = new int[N];
+    static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
         n = in.nextInt();
         m = in.nextInt();
         Arrays.fill(h, -1);
@@ -31,7 +31,7 @@ public class 染色法判定二分图 {
         boolean flag = true;
         //枚举每个点
         for (int i = 1; i <= n; i++) {
-            //若未染色
+            //若未染色,染色可以使用1和2区分不同颜色，用0表示未染色
             if (color[i] == 0) {
                 if (!dfs(i, 1)) {
                     flag = false;
@@ -52,17 +52,18 @@ public class 染色法判定二分图 {
         h[a] = idx++;
     }
 
-    //dfs(u,c)表示把u号点染色成c颜色，并且判断从u号点开始染其他相连的点是否成功
-    private static boolean dfs(int u, int c) {
-        color[u] = c;
-        for (int i = h[u]; i != -1; i = next[i]) {
-            int j = e[i];
-            if (color[j] == 0) {
-                if (!dfs(j, 3 - c)) {
+    // dfs(u,c)表示把a号点染色成c颜色，并且判断从a号点扩散开始染其他相连的点是否成功
+    private static boolean dfs(int a, int c) {
+        color[a] = c;
+        for (int i = h[a]; i != -1; i = next[i]) {
+            int b = e[i];
+            if (color[b] == 0) {
+                if (!dfs(b, 3 - c)) {
                     return false;
                 }
-            } else if (color[j] == c) {
-                return false;   //颜色重复
+            } else if (color[b] == c) {
+                // 颜色重复
+                return false;
             }
         }
         return true;
