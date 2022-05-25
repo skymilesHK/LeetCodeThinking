@@ -23,7 +23,7 @@ public class 二分图的最大匹配 {
         do {
             int a = in.nextInt();
             int b = in.nextInt();
-            // 特殊，虽然是无向边，但是不需要b-》a这条边 https://www.acwing.com/video/290/     17:00分钟
+            // 特殊，虽然是无向边，但是不需要b-》a这条边, 只需要找男生的 https://www.acwing.com/video/290/     17:00分钟
             add(a, b);
         } while (--m > 0);
 
@@ -40,7 +40,7 @@ public class 二分图的最大匹配 {
         System.out.println(res);
     }
 
-    //这个函数的作用是用来判断,如果加入x来参与模拟配对,会不会使匹配数增多
+    //这个函数的作用是为男单身狗 x 找一个对象， (或) x的女朋友被别人预定，给x换一个对象
     private static boolean find(int a) {
         //遍历自己喜欢的女孩b,邻接点
         for (int i = h[a]; i != -1; i = next[i]) {
