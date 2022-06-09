@@ -4,36 +4,33 @@ import java.util.*;
 
 public class Solution {
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        // 物品
-        int N = in.nextInt();
-        // 容量
-        int V = in.nextInt();
+    List<List<Integer>> res = new ArrayList<>();
+    boolean[] visited = null;
 
-        // 前i个元素表示物品的体积
-        int[] v = new int[N + 1];
-        // 前i个元素表示物品的价值
-        int[] w = new int[N + 1];
-        // 前i个物品，背包容量<=j下的最优解
-        int[] dp = new int[V + 1];
+    List<List<Integer>> permute(int[] nums) {
+        visited = new boolean[nums.length];
+        // 枚举每个位置填写什么数字
+        dfs(nums, 0, new ArrayList<Integer>());
+        return res;
+    }
 
-        for (int i = 1; i <= N; i++) {
-            v[i] = in.nextInt();
-            w[i] = in.nextInt();
+    // 枚举每个位置u写什么数
+    private void dfs(int[] nums, int u, List<Integer> path) {
+        if (u == nums.length) {
+            res.add(new ArrayList<>(path));
+            return;
         }
 
-        //for (int j = 0; j <= N; j++) {
-        //    dp[0][j] = 0;
-        //}
-
-        for (int i = 1; i <= N; i++) {
-            for (int j = V; j >= v[i]; j++) {
-                dp[j] = Math.max(dp[j], dp[j - v[i]] + w[i]);
-
+        // nums.length, 位置个数是固定的
+        for (int i = 0; i < nums.length; i++) {
+            // 这个数字没有尝试过
+            if (!visited[i]) {
+                visited[i] = true;
+                path.add(nums[i]);
+                dfs(nums, u + 1, path);
+                visited[i] = false;
+                path.remove(path.size() - 1);
             }
         }
-
-        System.out.println(dp[V]);
     }
 }

@@ -42,12 +42,14 @@ public class LeetCode46 {
         return res;
     }
 
+    // 枚举每个位置u写什么数
     private void dfs(int[] nums, int u, List<Integer> path) {
         if (u == nums.length) {
             res.add(new ArrayList<>(path));
             return;
         }
 
+        // nums.length, 位置个数是固定的
         for (int i = 0; i < nums.length; i++) {
             // 这个数字没有尝试过
             if (!visited[i]) {
