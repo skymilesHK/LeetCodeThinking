@@ -14,8 +14,8 @@ public class 多重背包问题I {
     public static void main(String[] args) {
         N = in.nextInt();
         V = in.nextInt();
-        //枚举物品
-        for(int i = 1; i <= N; i ++) {
+        //输入物品
+        for (int i = 1; i <= N; i++) {
             v[i] = in.nextInt();
             w[i] = in.nextInt();
             s[i] = in.nextInt();
