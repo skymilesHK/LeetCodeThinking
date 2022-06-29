@@ -1,5 +1,6 @@
 package com.alibaba.cainiao;
 
+import java.io.BufferedInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,49 +8,47 @@ import java.util.Scanner;
 
 public class Main {
 
-    static Scanner in = new Scanner(System.in);
-    static int n = 0;
-    static List<PII> list = new ArrayList<>();
+    static int N = 100002;
 
     public static void main(String[] args) {
-        n = in.nextInt();
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        //a为原数组，b为差分数组
+        int[] a = new int[N];
+        int[] b = new int[N];
 
-        for (int i = 0; i < n; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            list.add(new PII(a, b));
+        for (int i = 1; i <= n; i++) {
+            a[i] = scanner.nextInt();
+        }
+        //进行n次插入，初始化差分数组
+        for (int i = 1; i <= n; i++) {
+            insert(b, i, i, a[i]);
         }
 
-        // 按右端点排序
-        Collections.sort(list);
-
-        // res表示当前点的数量，pre表示上一个区间的右端点
-        int res = 0, pre = -0x3f3f3f;
-        for (int i = 0; i < n; i++) {
-            // 如果当前区间的左端点>上一个区间的右端点
-            // 更新pre，res+1
-            if (list.get(i).left > pre) {
-                res++;
-                pre = list.get(i).right;
-            }
+        while (m-- > 0) {
+            int l, r, c;
+            l = scanner.nextInt();
+            r = scanner.nextInt();
+            c = scanner.nextInt();
+            insert(b, l, r, c);
+        }
+        //经过一系列插入操作后，现在答案数组应该是b数组的前缀和，让b数组变成b的前缀和。
+        //公式 b[i] = b[i-1] + b[i]
+        for (int i = 1; i <= n; i++) {
+            b[i] += b[i - 1];
         }
 
-        System.out.println(res);
+        for (int i = 1; i <= n; i++) {
+            System.out.print(b[i] + " ");
+        }
+        System.out.println();
+        scanner.close();
     }
 
-    static class PII implements Comparable<PII> {
-
-        int left;
-        int right;
-
-        public PII(int left, int right) {
-            this.left = left;
-            this.right = right;
-        }
-
-        @Override
-        public int compareTo(PII o) {
-            return right - o.right;
-        }
+    //插入操作函数
+    public static void insert(int[] a, int l, int r, int c) {
+        a[l] += c;
+        a[r + 1] -= c;
     }
 }
