@@ -8,47 +8,42 @@ import java.util.Scanner;
 
 public class Main {
 
-    static int N = 100002;
+    // https://www.acwing.com/activity/content/code/content/39799/  y老师代码
+    // https://www.acwing.com/solution/content/31442/  便于理解版本
+
+    static int N = 100009;
+    static int[] a = new int[N];
+    static int[] b = new int[N];
+    static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int m = scanner.nextInt();
-        //a为原数组，b为差分数组
-        int[] a = new int[N];
-        int[] b = new int[N];
+        int n = in.nextInt();
+        int m = in.nextInt();
 
         for (int i = 1; i <= n; i++) {
-            a[i] = scanner.nextInt();
-        }
-        //进行n次插入，初始化差分数组
-        for (int i = 1; i <= n; i++) {
-            insert(b, i, i, a[i]);
+            a[i] = in.nextInt();
+            // 构建init差分数组
+            b[i] = a[i] - a[i - 1];
         }
 
-        while (m-- > 0) {
-            int l, r, c;
-            l = scanner.nextInt();
-            r = scanner.nextInt();
-            c = scanner.nextInt();
-            insert(b, l, r, c);
-        }
-        //经过一系列插入操作后，现在答案数组应该是b数组的前缀和，让b数组变成b的前缀和。
-        //公式 b[i] = b[i-1] + b[i]
-        for (int i = 1; i <= n; i++) {
-            b[i] += b[i - 1];
-        }
+        int l, r, c = 0;
+        do {
+            l = in.nextInt();
+            r = in.nextInt();
+            c = in.nextInt();
+            // 将序列中[l, r]之间的每个数都加上c
+            insert(l, r, c);
+        } while (--m > 0);
 
         for (int i = 1; i <= n; i++) {
-            System.out.print(b[i] + " ");
+            // 前缀和运算
+            a[i] = b[i] + a[i - 1];
+            System.out.printf("%d ", a[i]);
         }
-        System.out.println();
-        scanner.close();
     }
 
-    //插入操作函数
-    public static void insert(int[] a, int l, int r, int c) {
-        a[l] += c;
-        a[r + 1] -= c;
+    private static void insert(int l, int r, int c) {
+        b[l] += c;
+        b[r + 1] -= c;
     }
 }
