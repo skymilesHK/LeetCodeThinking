@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class 树的重心 {
 
+    // https://www.acwing.com/problem/content/description/848/
     static int N = 100009, M = 2 * 100009, n = 0, res = N, idx = 0;
     static int[] h = new int[N];
     static int[] e = new int[M];
