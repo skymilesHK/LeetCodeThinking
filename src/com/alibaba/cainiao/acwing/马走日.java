@@ -37,11 +37,10 @@ public class 马走日 {
             int a = x + dx[i];
             int b = y + dy[i];
             // 题目要求不重不漏
-            if (a < 0 || a >= n || b < 0 || b >= m || st[a][b]) {
-                continue;
+            if (a >= 0 && a < n && b >= 0 && b < m && !st[a][b]) {
+                dfs(a, b, cnt + 1);
             }
 
-            dfs(a, b, cnt + 1);
         }
         st[x][y] = false;
     }
