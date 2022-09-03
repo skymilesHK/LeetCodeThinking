@@ -27,11 +27,11 @@ public class 染色法判定二分图 {
             add(b, a);
         } while (--m > 0);
 
-        //标记是否染色成功
+        // 标记是否染色成功
         boolean flag = true;
-        //枚举每个点
+        // 枚举每个点
         for (int i = 1; i <= n; i++) {
-            //若未染色,染色可以使用1和2区分不同颜色，用0表示未染色
+            // 若未染色,染色可以使用1和2区分不同颜色，用0表示未染色
             if (color[i] == 0) {
                 if (!dfs(i, 1)) {
                     flag = false;
@@ -39,6 +39,7 @@ public class 染色法判定二分图 {
                 }
             }
         }
+
         if (flag) {
             System.out.println("Yes");
         } else {
@@ -46,16 +47,10 @@ public class 染色法判定二分图 {
         }
     }
 
-    private static void add(int a, int b) {
-        e[idx] = b;
-        next[idx] = h[a];
-        h[a] = idx++;
-    }
-
-    // dfs(u,c)表示把a号点染色成c颜色，并且判断从a号点扩散开始染其他相连的点是否成功
-    private static boolean dfs(int a, int c) {
-        color[a] = c;
-        for (int i = h[a]; i != -1; i = next[i]) {
+    // dfs(u,c)表示把u号点染色成c颜色，并且判断从u号点扩散开始染其他相连的点是否成功
+    private static boolean dfs(int u, int c) {
+        color[u] = c;
+        for (int i = h[u]; i != -1; i = next[i]) {
             int b = e[i];
             if (color[b] == 0) {
                 if (!dfs(b, 3 - c)) {
@@ -67,5 +62,11 @@ public class 染色法判定二分图 {
             }
         }
         return true;
+    }
+
+    private static void add(int a, int b) {
+        e[idx] = b;
+        next[idx] = h[a];
+        h[a] = idx++;
     }
 }

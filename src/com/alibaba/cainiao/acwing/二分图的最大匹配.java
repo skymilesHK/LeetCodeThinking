@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 // https://www.acwing.com/solution/content/5334/
+
 public class 二分图的最大匹配 {
 
     static int N = 509, M = 100009;
@@ -29,7 +30,7 @@ public class 二分图的最大匹配 {
 
         int res = 0;
         for (int i = 1; i <= n1; i++) {
-            //因为每次模拟匹配的预定情况都是不一样的所以每轮模拟都要初始化
+            // 因为每次模拟匹配的预定情况都是不一样的所以每轮模拟都要初始化
             st = new boolean[N];
             // 男生i
             if (find(i)) {
@@ -40,22 +41,22 @@ public class 二分图的最大匹配 {
         System.out.println(res);
     }
 
-    //这个函数的作用是为男单身狗 x 找一个对象， (或) x的女朋友被别人预定，给x换一个对象
+    // 这个函数的作用是为男单身狗 a 找一个对象， (或) a的女朋友被别人预定，给a换一个对象
     private static boolean find(int a) {
-        //遍历自己喜欢的女孩b,邻接点
+        // 遍历自己喜欢的女孩b,邻接点
         for (int i = h[a]; i != -1; i = next[i]) {
             int b = e[i];
-            //如果在这一轮模拟匹配中,这个女孩尚未被预定的话
+            // 如果在这一轮模拟匹配中,这个女孩尚未被预定的话
             if (!st[b]) {
                 st[b] = true;
-                //如果女孩b没有男朋友，或者 她原来的男朋友能够预定其它喜欢的女孩。 配对成功,更新match
+                // 如果女孩b没有男朋友，或者 她原来的男朋友能够预定其它喜欢的女孩。 配对成功, 更新match
                 if (match[b] == 0 || find(match[b])) {
                     match[b] = a;
                     return true;
                 }
             }
         }
-        //自己中意的全部都被预定了。配对失败。
+        // 自己中意的全部都被预定了。配对失败。
         return false;
     }
 
