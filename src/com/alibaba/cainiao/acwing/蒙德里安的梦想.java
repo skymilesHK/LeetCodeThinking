@@ -10,9 +10,10 @@ public class 蒙德里安的梦想 {
     static int N = 12, M = 1 << N;
     // 表示已经将前i-1列摆好，且从第i-1列伸出到第i列，状态是j的所有方案
     static long[][] f = new long[N][M];
+    // 储存每一列上合法的摆放状态
     static boolean[] st = new boolean[M];
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int n, m;
         while (true) {
             n = in.nextInt();
@@ -32,6 +33,7 @@ public class 蒙德里安的梦想 {
             // 对于每种状态，先预处理每列不能有奇数个连续的0
             // 枚举每个状态(1 << n就是一个状态)
             for (int i = 0; i < 1 << n; i++) {
+                // 记录这个状态被枚举过且可行
                 st[i] = true;
                 // 连续的0个数
                 int cnt = 0;
@@ -66,7 +68,7 @@ public class 蒙德里安的梦想 {
                         if ((j & k) == 0 && st[j | k]) {
                             //第i-2列伸出来的 和第i-1列伸出来的不冲突(不在同一行)
                             //解释一下st[j | k]
-                            //已经知道st[]数组表示的是这一列没有连续奇数个0的情况，
+                            //已经知道st[i]数组表示的是这一列没有连续奇数个0的情况，
                             //我们要考虑的是第i-1列（第i-1列是这里的主体）中从第i-2列横插过来的，
                             //还要考虑自己这一列（i-1列）横插到第i列的
                             //比如 第i-2列插过来的是k=10101，第i-1列插出去到第i列的是 j =01000，
@@ -84,3 +86,4 @@ public class 蒙德里安的梦想 {
     }
 
 }
+
