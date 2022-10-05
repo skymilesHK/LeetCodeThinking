@@ -1,13 +1,14 @@
-package com.alibaba.cainiao;
+package com.alibaba.cainiao.acwing;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
-    // https://www.acwing.com/solution/content/16905/ 图
-    // https://www.acwing.com/solution/content/79913/ 解释
+public class 最大不相交区间数量 {
+
+    // https://www.acwing.com/solution/content/5749/
+
     static Scanner in = new Scanner(System.in);
     static int N = 100002, n = 0, res = 0;
     static List<Pair> list;
@@ -27,9 +28,9 @@ public class Main {
         int pre = -0x3f3f3f3f;
         for (int i = 0; i < n; i++) {
             // 如果当前区间的左端点>上一个区间的右端点, 取区间最右端的端点
-            if (list.get(i).left > pre) {
+            if (list.get(i).first > pre) {
                 res++;
-                pre = list.get(i).right;
+                pre = list.get(i).second;
             } else {
                 // 区间内已经取了点时，直接跳过即可
                 continue;
@@ -41,16 +42,16 @@ public class Main {
 
     static class Pair implements Comparable<Pair> {
 
-        int left, right;
+        int first, second;
 
-        public Pair(int left, int right) {
-            this.left = left;
-            this.right = right;
+        public Pair(int first, int second) {
+            this.first = first;
+            this.second = second;
         }
 
         @Override
         public int compareTo(Pair o) {
-            return this.right - o.right;
+            return this.second - o.second;
         }
     }
 }

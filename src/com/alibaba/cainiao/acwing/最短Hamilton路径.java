@@ -35,6 +35,7 @@ public class 最短Hamilton路径 {
             }
         }
 
+        // 为啥要-1，因为需要每一位都是1
         System.out.println(dp[(1 << n) - 1][n - 1]);
     }
 
