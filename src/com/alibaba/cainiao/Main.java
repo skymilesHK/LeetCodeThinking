@@ -1,56 +1,52 @@
 package com.alibaba.cainiao;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    // https://www.acwing.com/solution/content/16905/ 图
-    // https://www.acwing.com/solution/content/79913/ 解释
+
     static Scanner in = new Scanner(System.in);
-    static int N = 100002, n = 0, res = 0;
-    static List<Pair> list;
+    static Pair[] a;
+    static int n;
 
     public static void main(String[] args) {
         n = in.nextInt();
-        list = new ArrayList<>(n);
+        a = new Pair[n];
         for (int i = 0; i < n; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            list.add(new Pair(a, b));
+            int w = in.nextInt();
+            int s = in.nextInt();
+            // 存入（体重+强壮值，体重）
+            a[i] = new Pair(w + s, w);
         }
 
-        // 按右端点排序
-        Collections.sort(list);
-        // res表示当前点的数量，pre表示上一个区间的右端点
-        int pre = -0x3f3f3f3f;
+        Arrays.sort(a);
+        int res = -0x3f3f3f3f;
+        int sum = 0;
         for (int i = 0; i < n; i++) {
-            // 如果当前区间的左端点>上一个区间的右端点, 取区间最右端的端点
-            if (list.get(i).left > pre) {
-                res++;
-                pre = list.get(i).right;
-            } else {
-                // 区间内已经取了点时，直接跳过即可
-                continue;
-            }
+            // 体重
+            int w = a[i].second;
+            // 强壮值
+            int s = a[i].first - w;
+            // 减去的是最下面的一个人的强壮值
+            res = Math.max(res, sum - s);
+            //叠罗汉上去一个人就得叠加重量
+            sum += w;
         }
-
         System.out.println(res);
     }
 
     static class Pair implements Comparable<Pair> {
 
-        int left, right;
+        int first, second;
 
-        public Pair(int left, int right) {
-            this.left = left;
-            this.right = right;
+        public Pair(int first, int second) {
+            this.first = first;
+            this.second = second;
         }
 
         @Override
         public int compareTo(Pair o) {
-            return this.right - o.right;
+            return this.first - o.first;
         }
     }
 }
