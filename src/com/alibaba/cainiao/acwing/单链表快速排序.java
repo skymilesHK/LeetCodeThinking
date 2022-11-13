@@ -36,7 +36,7 @@ public class 单链表快速排序 {
             }
         }
 
-        // 交换pivot(low每次都是pivot)
+        // 交换pivot(l每次都是pivot)
         swap(l, pre);
         quickSort(l, pre);
         quickSort(i, r);
