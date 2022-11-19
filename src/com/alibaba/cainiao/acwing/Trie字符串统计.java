@@ -27,32 +27,34 @@ public class Trie字符串统计 {
         }
     }
 
-    private static void insert(char[] str) {
-        // 类似指针，开始指向root节点，向下延伸
+    // 返回改单词的个数
+    private static int insert(char[] str) {
+        // 类似指针，开始指向root节点，向下延伸, 表示当前节点的大致位置
         int p = 0;
         for (int i = 0; i < str.length; i++) {
+            // 将字母转化为数字
             int u = str[i] - 'a';
             if (son[p][u] == 0) {
                 // 没有该子结点就创建一个
                 son[p][u] = ++idx;
             }
-            // 走到p的子结点
             p = son[p][u];
         }
-
-        // 结束时的标记，也是记录以此节点结束的字符串个数
-        cnt[p]++;
+        return cnt[p];
     }
 
+    // 返回改单词的个数
     private static int query(char[] str) {
         int p = 0;
         for (int i = 0; i < str.length; i++) {
             int u = str[i] - 'a';
+            // 该节点不存在，即该字符串不存在
             if (son[p][u] == 0) {
                 return 0;
             }
             p = son[p][u];
         }
+        // 返回字符串出现的次数
         return cnt[p];
     }
 
