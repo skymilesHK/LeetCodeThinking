@@ -1,65 +1,77 @@
 package com.alibaba.cainiao;
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
 
-    // assume no concurrency
-    static List<List<Integer>> res = new ArrayList<>();
-    // 表示i这个数字nums[i]是否已经使用过
-    static boolean[] used = null;
-    static int[] num = null;
-    static int[] path = null;
-    static int n = 0;
-    static Scanner in = new Scanner(System.in);
+    // https://www.bilibili.com/video/av34962180?p=2     思路
+    // https://leetcode.com/problems/pyramid-transition-matrix/discuss/374538/Java-2ms-Easy-DFS      代码
 
-    public static void main(String[] args) {
-        n = in.nextInt();
-        used = new boolean[n];
-        num = new int[n];
-        path = new int[n];
+    HashSet<Character>[][] allows = new HashSet[7][7];
 
-        for (int i = 1; i <= n; i++) {
-            num[i - 1] = i;
+    public boolean pyramidTransition(String bottom, List<String> allowed) {
+        if (allowed.size() < 1) {
+            return false;
         }
 
-        dfs(num, 0);
-        res.forEach(l -> {
-            l.forEach(n -> System.out.printf("%d ", n));
-            System.out.println();
+        allowed.forEach(str -> {
+            int a = str.charAt(0) - 'A';
+            int b = str.charAt(1) - 'A';
+            char c = str.charAt(2);
+            if (allows[a][b] == null) {
+                allows[a][b] = new HashSet<>();
+            }
+            allows[a][b].add(c);
         });
+
+        return dfs(bottom, "");
     }
 
     /**
-     * 枚举每个位置放什么数
+     * 能否从上一层bottom是否能枚举出当前层的结果
      *
-     * @param num
-     * @param u   当前枚举的位置
+     * @param last 上一层
+     * @param now  当前层
+     * @return
      */
-    private static void dfs(int[] num, int u) {
-        if (u == n) {
-            res.add(Arrays.stream(path).boxed().collect(Collectors.toList()));
-            return;
+    private boolean dfs(String last, String now) {
+        if (last.length() == 1) {
+            return true;
         }
 
-        // 遍历每一个数字
-        for (int i = 0; i < n; i++) {
-            // 该数字没有使用过
-            if (!used[i]) {
-                used[i] = true;
-                // 将未使用过的数字放到 指定位置
-                path[u] = num[i];
-                // 枚举下一个位置
-                dfs(num, u + 1);
-                // 恢复现场
-                used[i] = false;
-                //path[i] 不用恢复，每次会被覆盖。
+        // 说明当前这层枚举完毕。递归做更上一层的dfs任务
+        if (now.length() + 1 == last.length()) {
+            return dfs(now, "");
+        }
+
+        // 枚举allows
+        // Input: bottom = "BCD", allowed = ["BCG", "CDE", "GEA", "FFF"]
+        // candidate = G, E, A, F
+        int a = last.charAt(now.length()) - 'A';
+        int b = last.charAt(now.length() + 1) - 'A';
+        if (null == allows[a][b]) {
+            return false;
+        }
+
+        for (char candidate : allows[a][b]) {
+            if (dfs(last, now + candidate)) {
+                return true;
             }
         }
+        return false;
+    }
+}
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
     }
 }
 
