@@ -9,7 +9,7 @@ public class 八数码 {
     static String end = "12345678x";
     static int[] dx = {-1, 0, 1, 0};
     static int[] dy = {0, 1, 0, -1};
-    static char[] op = {'u', 'r', 'd', 'l'};
+    // static char[] op = {'u', 'r', 'd', 'l'};
     static Queue<String> q = new ArrayDeque<>();
     static Map<String, Integer> dist = new HashMap<>();
     static Scanner in = new Scanner(System.in);

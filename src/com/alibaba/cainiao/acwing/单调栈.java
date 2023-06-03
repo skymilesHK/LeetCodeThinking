@@ -8,6 +8,7 @@ public class 单调栈 {
     static int tt = 0;
     static Scanner in = new Scanner(System.in);
 
+    // // https://www.acwing.com/solution/content/27437/
     public static void main(String[] args) {
         n = in.nextInt();
         for (int i = 0; i < n; i++) {

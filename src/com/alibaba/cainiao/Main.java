@@ -1,67 +1,20 @@
 package com.alibaba.cainiao;
 
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
-    // https://www.bilibili.com/video/av34962180?p=2     思路
-    // https://leetcode.com/problems/pyramid-transition-matrix/discuss/374538/Java-2ms-Easy-DFS      代码
+    // 考虑最坏的情形，每个整数都单独形成了一条路径，因此存储每个整数都需要 31 个节点，存储 N 个整数需要 31N 个节点，算上最后的根节点一共有 31N+1 个
+    static int N = 100001, M = 3100001, n = 0, idx = 0, res = 0;
+    // 存输入的数字
+    static int[] a = new int[N];
+    // son数组 存输入数字二进制的每一位情况
+    // 0表示不存在 其他表示存在并指向下一个son数组下标
+    static int[][] son = new int[M][2];
+    static Scanner in = new Scanner(System.in);
 
-    HashSet<Character>[][] allows = new HashSet[7][7];
+    public static void main(String[] args) {
 
-    public boolean pyramidTransition(String bottom, List<String> allowed) {
-        if (allowed.size() < 1) {
-            return false;
-        }
-
-        allowed.forEach(str -> {
-            int a = str.charAt(0) - 'A';
-            int b = str.charAt(1) - 'A';
-            char c = str.charAt(2);
-            if (allows[a][b] == null) {
-                allows[a][b] = new HashSet<>();
-            }
-            allows[a][b].add(c);
-        });
-
-        return dfs(bottom, "");
-    }
-
-    /**
-     * 能否从上一层bottom是否能枚举出当前层的结果
-     *
-     * @param last 上一层
-     * @param now  当前层
-     * @return
-     */
-    private boolean dfs(String last, String now) {
-        if (last.length() == 1) {
-            return true;
-        }
-
-        // 说明当前这层枚举完毕。递归做更上一层的dfs任务
-        if (now.length() + 1 == last.length()) {
-            return dfs(now, "");
-        }
-
-        // 枚举allows
-        // Input: bottom = "BCD", allowed = ["BCG", "CDE", "GEA", "FFF"]
-        // candidate = G, E, A, F
-        int a = last.charAt(now.length()) - 'A';
-        int b = last.charAt(now.length() + 1) - 'A';
-        if (null == allows[a][b]) {
-            return false;
-        }
-
-        for (char candidate : allows[a][b]) {
-            if (dfs(last, now + candidate)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 
