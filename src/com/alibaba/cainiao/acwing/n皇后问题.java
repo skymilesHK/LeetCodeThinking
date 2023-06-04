@@ -13,6 +13,7 @@ public class n皇后问题 {
     static char[][] g = new char[N][N];
 
     // https://www.acwing.com/solution/content/106979/
+    // https://blog.csdn.net/weixin_49486457/article/details/123534983?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522168001275216800215028030%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=168001275216800215028030&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-1-123534983-null-null.blog_rank_default&utm_term=n%E7%9A%87%E5%90%8E&spm=1018.2226.3001.4450
     public static void main(String[] args) {
         n = in.nextInt();
         for (int i = 0; i < n; i++) {

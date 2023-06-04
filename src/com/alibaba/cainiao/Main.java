@@ -1,67 +1,68 @@
 package com.alibaba.cainiao;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
-    static int N = 50002;
-    static int n, k, res;
-    static int[] parent = new int[N];
-    static int[] dist = new int[N];
-    static Scanner in = new Scanner(System.in);
+    static final Scanner in = new Scanner(System.in);
+    static int n, m, res;
+    static int[][] g, d;    // g是输入的迷宫，d是任意点到原点的距离（但是d还有一个功能类似visit数组，-1表示点访问过）
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, -1, 0, 1};
 
+    // https://www.acwing.com/activity/content/problem/content/907/1/
     public static void main(String[] args) {
         n = in.nextInt();
-        k = in.nextInt();
-        for (int i = 1; i <= n; i++) {
-            parent[i] = i;
+        m = in.nextInt();
+        g = new int[n][m];
+        d = new int[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                g[i][j] = in.nextInt();
+            }
         }
+        // 表示[i,j]到原点距离，-1表示没有visit过
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(d[i], -1);
+        }
+        d[0][0] = 0;
+        System.out.println(bfs());
+    }
 
-        do {
-            // d--> 说法种类
-            // x--> 吃的物
-            // y--> 被吃的物
-            int d = in.nextInt();
-            int x = in.nextInt();
-            int y = in.nextInt();
+    private static int bfs() {
+        Queue<Pair> q = new ArrayDeque<>();
+        q.offer(new Pair(0, 0));
 
-            if (x > n || y > n) {
-                res++;
-            } else {
-                // 先找到父节点
-                int xRoot = find(x);
-                int yRoot = find(y);
-                // 同类
-                if (d == 1) {
-                    if (xRoot == yRoot && (dist[y] - dist[x]) % 3 != 0) {
-                        res++;
-                    } else if (xRoot != yRoot) {
-                        // 当前不在同一集合中，无法判定为假。故为真，应先加入同一集合表示存在同类关系
-                        parent[xRoot] = yRoot;
-                        dist[xRoot] = dist[y] - dist[x];
-                    }
-                } else {
-                    // 为吃被吃掉的关系
-                    if (xRoot == yRoot && (dist[x] - dist[y] - 1) % 3 != 0) {
-                        res++;
-                    } else if (xRoot != yRoot) {
-                        // 如果不在同一集合内，并到一起，更新距离
-                        parent[xRoot] = yRoot;
-                        dist[xRoot] = dist[y] + 1 - dist[x];
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+            for (int i = 0; i < levelSize; i++) {
+                Pair t = q.poll();
+                for (int p = 0; p < 4; p++) {
+                    int x = t.first + dx[p];
+                    int y = t.second + dy[p];
+                    if (x >= 0 && x < n && y >= 0 && y < m && g[x][y] == 0 && d[x][y] == -1) {
+                        // bfs中的一个点，只有在第一次被搜索到，才能算最短路径的点
+                        d[x][y] = d[t.first][t.second] + 1;
+                        q.offer(new Pair(x, y));
                     }
                 }
             }
-        } while (--k > 0);
+        }
 
-        System.out.println(res);
+        return d[n - 1][m - 1];
     }
 
-    private static int find(int p) {
-        if (p != parent[p]) {
-            int r = find(parent[p]);                // 先把父节点及以上压缩到树根
-            dist[p] = dist[p] + dist[parent[p]];    // 更新边权
-            parent[p] = r;                          // 父节点也压缩到树根
+    static class Pair {
+        int first;
+        int second;
+
+        public Pair(int x, int y) {
+            first = x;
+            second = y;
         }
-        return parent[p];
     }
 }
 
