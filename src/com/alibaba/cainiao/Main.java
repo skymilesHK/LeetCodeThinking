@@ -1,68 +1,63 @@
 package com.alibaba.cainiao;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
-    static final Scanner in = new Scanner(System.in);
-    static int n, m, res;
-    static int[][] g, d;    // g是输入的迷宫，d是任意点到原点的距离（但是d还有一个功能类似visit数组，-1表示点访问过）
-    static int[] dx = {-1, 0, 1, 0};
-    static int[] dy = {0, -1, 0, 1};
 
-    // https://www.acwing.com/activity/content/problem/content/907/1/
+    // 考虑最坏的情形，每个整数都单独形成了一条路径，因此存储每个整数都需要 31 个节点，存储 N 个整数需要 31N 个节点，算上最后的根节点一共有 31N+1 个
+    static int N = 100001, M = 3100002, n = 0, idx = 0, res = 0;
+    // 存输入的数字
+    static int[] a = new int[N];
+    // son数组 存输入数字二进制的每一位情况
+    // 0表示不存在 其他表示存在并指向下一个son数组下标
+    static int[][] son = new int[M][2];
+    static Scanner in = new Scanner(System.in);
+
     public static void main(String[] args) {
         n = in.nextInt();
-        m = in.nextInt();
-        g = new int[n][m];
-        d = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            a[i] = in.nextInt();
+        }
 
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                g[i][j] = in.nextInt();
-            }
+            insert(a[i]);
+            // t是a[i]的异或配偶
+            int t = query(a[i]);
         }
-        // 表示[i,j]到原点距离，-1表示没有visit过
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(d[i], -1);
-        }
-        d[0][0] = 0;
-        System.out.println(bfs());
     }
 
-    private static int bfs() {
-        Queue<Pair> q = new ArrayDeque<>();
-        q.offer(new Pair(0, 0));
-
-        while (!q.isEmpty()) {
-            int levelSize = q.size();
-            for (int i = 0; i < levelSize; i++) {
-                Pair t = q.poll();
-                for (int p = 0; p < 4; p++) {
-                    int x = t.first + dx[p];
-                    int y = t.second + dy[p];
-                    if (x >= 0 && x < n && y >= 0 && y < m && g[x][y] == 0 && d[x][y] == -1) {
-                        // bfs中的一个点，只有在第一次被搜索到，才能算最短路径的点
-                        d[x][y] = d[t.first][t.second] + 1;
-                        q.offer(new Pair(x, y));
-                    }
-                }
+    private static void insert(int x) {
+        // 类似指针，开始指向root节点，向下延伸, 表示当前节点的大致位置
+        int p = 0;
+        for (int i = 30; i >= 0; i--) {
+            // 转化为数字
+            int u = x >> i & 1;
+            if (son[p][u] == 0) {
+                // 没有该子结点就创建一个
+                son[p][u] = ++idx;
             }
+            // 走到p的子结点
+            p = son[p][u];
         }
-
-        return d[n - 1][m - 1];
     }
 
-    static class Pair {
-        int first;
-        int second;
-
-        public Pair(int x, int y) {
-            first = x;
-            second = y;
+    // 返回x的异或配偶
+    private static int query(int x) {
+        int p = 0;
+        for (int i = 30; i >= 0; i--) {
+            // 先尝试另一个方向
+            int u = x >> i & 1;
+            // 如果可以走
+            if (son[p][1 - u] != 0) {
+                p = son[p][1 - u];
+                res = res * 2 + (1 - u);    // 这个地方与十进制一样 n = n * 10 + x; 二进制就是 n = n * 2 + x;
+            } else {
+                // 不可以走
+                p = son[p][u];
+                res = res * 2 + u;
+            }
         }
+        return res;
     }
 }
 

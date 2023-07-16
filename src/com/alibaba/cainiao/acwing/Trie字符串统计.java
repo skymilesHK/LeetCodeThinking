@@ -27,7 +27,6 @@ public class Trie字符串统计 {
         }
     }
 
-    // 返回改单词的个数
     private static int insert(char[] str) {
         // 类似指针，开始指向root节点，向下延伸, 表示当前节点的大致位置
         int p = 0;
@@ -43,7 +42,7 @@ public class Trie字符串统计 {
         return cnt[p];
     }
 
-    // 返回改单词的个数
+    // 返回字符串出现的次数
     private static int query(char[] str) {
         int p = 0;
         for (int i = 0; i < str.length; i++) {
