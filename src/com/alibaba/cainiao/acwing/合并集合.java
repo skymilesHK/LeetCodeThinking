@@ -3,7 +3,8 @@ package com.alibaba.cainiao.acwing;
 import java.util.Scanner;
 
 public class 合并集合 {
-
+    // 1. 每个集合用一颗树表示，树根的编号就是集合的编号。
+    // 2. 每个节点存储它父节点。
     static int N = 100001, n = 0, m = 0;
     static int[] parent = new int[N];
     static Scanner in = new Scanner(System.in);

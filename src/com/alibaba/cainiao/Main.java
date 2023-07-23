@@ -1,63 +1,114 @@
 package com.alibaba.cainiao;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-
-    // 考虑最坏的情形，每个整数都单独形成了一条路径，因此存储每个整数都需要 31 个节点，存储 N 个整数需要 31N 个节点，算上最后的根节点一共有 31N+1 个
-    static int N = 100001, M = 3100002, n = 0, idx = 0, res = 0;
-    // 存输入的数字
-    static int[] a = new int[N];
-    // son数组 存输入数字二进制的每一位情况
-    // 0表示不存在 其他表示存在并指向下一个son数组下标
-    static int[][] son = new int[M][2];
+    // https://www.acwing.com/solution/content/14088/
+    static int N = 502, M = 10002, n, m, k;
+    static int INF = 0x3f3f3f3f;
+    static int[] dist = new int[N];
+    static int[] backup;
+    static Edge[] edges = new Edge[M];
     static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
         n = in.nextInt();
-        for (int i = 0; i < n; i++) {
-            a[i] = in.nextInt();
+        m = in.nextInt();
+        k = in.nextInt();
+        for (int i = 0; i < m; i++) {
+            int a = in.nextInt();
+            int b = in.nextInt();
+            int w = in.nextInt();
+            edges[i] = new Edge(a, b, w);
         }
 
-        for (int i = 0; i < n; i++) {
-            insert(a[i]);
-            // t是a[i]的异或配偶
-            int t = query(a[i]);
+        Arrays.fill(dist, INF);
+        int t = bellmanFord();
+        if (t == INF) {
+            System.out.println("impossible");
+        } else {
+            System.out.println(t);
         }
     }
 
-    private static void insert(int x) {
-        // 类似指针，开始指向root节点，向下延伸, 表示当前节点的大致位置
-        int p = 0;
-        for (int i = 30; i >= 0; i--) {
-            // 转化为数字
-            int u = x >> i & 1;
-            if (son[p][u] == 0) {
-                // 没有该子结点就创建一个
-                son[p][u] = ++idx;
+    private static int bellmanFord() {
+        dist[1] = 0;
+        // 不超过k条边
+        for (int i = 0; i < k; i++) {
+            backup = Arrays.copyOf(dist, N);
+            // 遍历所有边
+            for (int j = 0; j < m; j++) {
+                int a = edges[j].a;
+                int b = edges[j].b;
+                int w = edges[j].w;
+                dist[b] = Math.min(dist[b], backup[a] + w);
             }
-            // 走到p的子结点
-            p = son[p][u];
+        }
+
+        if (dist[n] >= INF / 2) {
+            return -1;
+        }
+        return dist[n];
+    }
+
+    static class Edge {
+        int a, b, w;
+
+        public Edge(int a, int b, int w) {
+            this.a = a;
+            this.b = b;
+            this.w = w;
+        }
+    }
+}
+
+class UF {
+    int[] parent;
+    int[] h;
+
+    public UF(int size) {
+        parent = new int[size];
+        h = new int[size];
+
+        for (int i = 0; i < size; i++) {
+            parent[i] = i;
+            h[i] = 1;
         }
     }
 
-    // 返回x的异或配偶
-    private static int query(int x) {
-        int p = 0;
-        for (int i = 30; i >= 0; i--) {
-            // 先尝试另一个方向
-            int u = x >> i & 1;
-            // 如果可以走
-            if (son[p][1 - u] != 0) {
-                p = son[p][1 - u];
-                res = res * 2 + (1 - u);    // 这个地方与十进制一样 n = n * 10 + x; 二进制就是 n = n * 2 + x;
-            } else {
-                // 不可以走
-                p = son[p][u];
-                res = res * 2 + u;
-            }
+    public int getSize() {
+        return parent.length;
+    }
+
+    public boolean union(int p, int q) {
+        int pRoot = find(p);
+        int qRoot = find(q);
+        if (pRoot == qRoot) {
+            return false;
         }
-        return res;
+
+        if (h[pRoot] < h[qRoot]) {
+            parent[pRoot] = qRoot;
+        } else if (h[pRoot] > h[qRoot]) {
+            parent[qRoot] = pRoot;
+        } else {
+            parent[pRoot] = qRoot;
+            h[qRoot]++;
+        }
+        return true;
+    }
+
+    public int find(int p) {
+        if (p < 0 || p >= getSize()) {
+            throw new IllegalArgumentException("p is out of bound");
+        }
+
+        while (p != parent[p]) {
+            parent[p] = parent[parent[p]];
+            p = parent[p];
+        }
+        return p;
     }
 }
 

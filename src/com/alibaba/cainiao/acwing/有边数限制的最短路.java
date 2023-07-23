@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class 有边数限制的最短路 {
 
-    // https://www.acwing.com/problem/content/855/
+    // https://www.acwing.com/solution/content/14088/
     static int N = 501, M = 10001, n, m, k;
     static int INF = 0x3f3f3f3f;
     static int[] dist = new int[N];
