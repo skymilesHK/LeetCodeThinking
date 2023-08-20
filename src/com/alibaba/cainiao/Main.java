@@ -4,62 +4,63 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    // https://www.acwing.com/solution/content/14088/
-    static int N = 502, M = 10002, n, m, k;
-    static int INF = 0x3f3f3f3f;
-    static int[] dist = new int[N];
-    static int[] backup;
-    static Edge[] edges = new Edge[M];
+
+    // https://www.acwing.com/solution/content/7920/
+    static int N = 6001, n = 0, idx = 0;
+    static int[] h = new int[N];
+    static int[] e = new int[N];
+    static int[] next = new int[N];
+    static int[][] dp = new int[N][2];
+    static int[] happy = new int[N];
+    static boolean[] hasParent = new boolean[N];
     static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
         n = in.nextInt();
-        m = in.nextInt();
-        k = in.nextInt();
-        for (int i = 0; i < m; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            int w = in.nextInt();
-            edges[i] = new Edge(a, b, w);
+        // 输入快乐度
+        for (int i = 1; i <= n; i++) {
+            happy[i] = in.nextInt();
         }
 
-        Arrays.fill(dist, INF);
-        int t = bellmanFord();
-        if (t == INF) {
-            System.out.println("impossible");
-        } else {
-            System.out.println(t);
+        Arrays.fill(h, -1);
+        // n个点n-1条边
+        for (int i = 0; i < n - 1; i++) {
+            // K 是 L 的直接上司
+            int l = in.nextInt();
+            int k = in.nextInt();
+            add(k, l);
+            hasParent[l] = true;
+        }
+
+        // 找父节点
+        int root = 1;
+        while (hasParent[root]) {
+            root++;
+        }
+        dfs(root);
+        System.out.println(Math.max(dp[root][0], dp[root][1]));
+    }
+
+    // 寻找以u为root的树中，寻找快乐指数总和
+    private static void dfs(int u) {
+        dp[u][0] = 0;
+        dp[u][1] = happy[u];
+        // u的所有下属
+        for (int i = h[u]; i != -1; i = next[i]) {
+            int j = e[i];
+            dfs(j);
+            // 当前u结点不选，子结点可选可不选
+            dp[u][0] += Math.max(dp[j][0], dp[j][1]);
+            // 当前u结点选，子结点一定不能选
+            dp[u][1] += dp[j][0];
         }
     }
 
-    private static int bellmanFord() {
-        dist[1] = 0;
-        // 不超过k条边
-        for (int i = 0; i < k; i++) {
-            backup = Arrays.copyOf(dist, N);
-            // 遍历所有边
-            for (int j = 0; j < m; j++) {
-                int a = edges[j].a;
-                int b = edges[j].b;
-                int w = edges[j].w;
-                dist[b] = Math.min(dist[b], backup[a] + w);
-            }
-        }
-
-        if (dist[n] >= INF / 2) {
-            return -1;
-        }
-        return dist[n];
-    }
-
-    static class Edge {
-        int a, b, w;
-
-        public Edge(int a, int b, int w) {
-            this.a = a;
-            this.b = b;
-            this.w = w;
-        }
+    // a->b连一条边
+    private static void add(int a, int b) {
+        e[idx] = b;
+        next[idx] = h[a];
+        h[a] = idx++;
     }
 }
 

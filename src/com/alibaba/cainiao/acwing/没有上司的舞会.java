@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class 没有上司的舞会 {
 
     // https://www.acwing.com/problem/content/287/
-
     static int N = 6009;
     static int n = 0;
     static int idx = 0;
