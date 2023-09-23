@@ -1,68 +1,62 @@
 package com.alibaba.cainiao;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
-    // https://www.acwing.com/solution/content/7920/
-    static int N = 6001, n = 0, idx = 0;
-    static int[] h = new int[N];
-    static int[] e = new int[N];
-    static int[] next = new int[N];
-    static int[][] dp = new int[N][2];
-    static int[] happy = new int[N];
-    static boolean[] hasParent = new boolean[N];
+    // https://www.acwing.com/video/378/
+    // 分公司数N，设备台数M
+    static int N = 12, M = 16;
+    static int n, m;
+    static int[][] v = new int[N][M];
+    static int[][] w = new int[N][M];
+    // 只从前i组物品中选，当前体积小于等于j的最大值
+    static int[][] dp = new int[N][M];
+    static int[] res = new int[N];
     static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
         n = in.nextInt();
-        // 输入快乐度
+        m = in.nextInt();
+
         for (int i = 1; i <= n; i++) {
-            happy[i] = in.nextInt();
+            for (int j = 1; j <= m; j++) {
+                v[i][j] = j;
+                w[i][j] = in.nextInt();
+            }
         }
 
-        Arrays.fill(h, -1);
-        // n个点n-1条边
-        for (int i = 0; i < n - 1; i++) {
-            // K 是 L 的直接上司
-            int l = in.nextInt();
-            int k = in.nextInt();
-            add(k, l);
-            hasParent[l] = true;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                // 不选
+                dp[i][j] = dp[i - 1][j];
+                // 选i个分公司中k个机器
+                for (int k = 0; k <= j; k++) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - v[i][k]] + w[i][k]);
+                }
+            }
         }
 
-        // 找父节点
-        int root = 1;
-        while (hasParent[root]) {
-            root++;
-        }
-        dfs(root);
-        System.out.println(Math.max(dp[root][0], dp[root][1]));
-    }
+        System.out.println(dp[n][m]);
 
-    // 寻找以u为root的树中，寻找快乐指数总和
-    private static void dfs(int u) {
-        dp[u][0] = 0;
-        dp[u][1] = happy[u];
-        // u的所有下属
-        for (int i = h[u]; i != -1; i = next[i]) {
-            int j = e[i];
-            dfs(j);
-            // 当前u结点不选，子结点可选可不选
-            dp[u][0] += Math.max(dp[j][0], dp[j][1]);
-            // 当前u结点选，子结点一定不能选
-            dp[u][1] += dp[j][0];
+        //寻找当前状态dp[i][j]是从上述哪一个dp[i-1][k]状态转移过来的
+        for (int i = n, j = m; i >= 1; i--) {
+            for (int k = 0; k <= j; k++) {
+                if (dp[i][j] == dp[i - 1][j - v[i][k]] + w[i][k]) {
+                    // 第i个分公司分了k个机器
+                    res[i] = k;
+                    j -= k;
+                    break;
+                }
+            }
         }
-    }
 
-    // a->b连一条边
-    private static void add(int a, int b) {
-        e[idx] = b;
-        next[idx] = h[a];
-        h[a] = idx++;
+        for (int i = 1; i <= n; i++) {
+            System.out.printf("%d %d\n", i, res[i]);
+        }
     }
 }
+
 
 class UF {
     int[] parent;

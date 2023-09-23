@@ -3,12 +3,13 @@ package com.alibaba.cainiao.acwing;
 import java.util.Scanner;
 
 public class 机器分配 {
-    // https://www.acwing.com/problem/content/description/1015/
-
-    static int N = 12, M = 18;  // 分公司数N，设备台数M；
+    // https://www.acwing.com/video/378/
+    // 分公司数N，设备台数M
+    static int N = 12, M = 16;
     static int n, m;
     static int[][] v = new int[N][M];
     static int[][] w = new int[N][M];
+    // 只从前i组物品中选，当前体积小于等于j的最大值
     static int[][] dp = new int[N][M];
     static int[] res = new int[N];
     static Scanner in = new Scanner(System.in);
@@ -16,6 +17,7 @@ public class 机器分配 {
     public static void main(String[] args) {
         n = in.nextInt();
         m = in.nextInt();
+
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
                 v[i][j] = j;
@@ -24,9 +26,11 @@ public class 机器分配 {
         }
 
         for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                dp[i][j] = dp[i - 1][j];  //不选
-                for (int k = 1; k <= j; k++) {
+            for (int j = 0; j <= m; j++) {
+                // 不选
+                dp[i][j] = dp[i - 1][j];
+                // 选i个分公司中k个机器
+                for (int k = 0; k <= j; k++) {
                     dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - v[i][k]] + w[i][k]);
                 }
             }
