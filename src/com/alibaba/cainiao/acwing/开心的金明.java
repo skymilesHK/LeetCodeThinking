@@ -3,8 +3,8 @@ package com.alibaba.cainiao.acwing;
 import java.util.Scanner;
 
 public class 开心的金明 {
-    // https://www.acwing.com/solution/content/54006/
 
+    // https://www.acwing.com/solution/content/54006/
     static int N, V = 0;
     static int[] v = new int[29];
     static int[] w = new int[29];
