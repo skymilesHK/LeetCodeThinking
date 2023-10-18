@@ -3,8 +3,7 @@ package com.alibaba.cainiao.acwing;
 import java.util.Scanner;
 
 public class 买书 {
-    // https://www.acwing.com/solution/content/52967/
-
+    // https://www.acwing.com/solution/content/108561/
     static int N = 5, M = 1009;
     static int n = 4, m = 0;
     static int[] v = {0, 10, 20, 50, 100};
